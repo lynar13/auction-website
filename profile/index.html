@@ -24,8 +24,11 @@
       <section class="card p-4 shadow-sm">
         <div class="text-center mb-4">
           <img src="/images/profile.jpeg" alt="Profile Image" id="profileImage" class="rounded-circle" width="150" />
+          <button id="updateAvatarButton" class="btn btn-link mt-2">Update Avatar</button>
+          <input type="file" id="avatarInput" class="d-none" accept="image/*" />
         </div>
         <h1 class="text-center mb-4" id="username"></h1>
+        <p class="text-center text-muted" id="credits">Credits: 0</p>
 
         <div class="text-center">
           <button id="followButton" class="btn btn-primary">Follow</button>
@@ -51,5 +54,6 @@
         </div>
       </section>
     </div>
+
   </body>
 </html>
