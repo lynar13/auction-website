@@ -10,6 +10,7 @@ import {
     API_AUTH_LOGIN,
     API_AUTH_REGISTER,
     API_AUCTION_LISTINGS,
+    API_AUCTION_LISTINGS_ID,
     API_AUCTION_PROFILES,
     API_AUCTION_PROFILES_NAME,
     API_AUCTION_LISTINGS_TAG,
@@ -121,7 +122,7 @@ import {
   
       read: async function(id) {
         const request = {
-          url: `${API_AUCTION_LISTINGS}/${id}`, // Use constant for individual post URL
+          url: `${API_AUCTION_LISTINGS_ID}/${id}`, // Use constant for individual post URL
           method: "GET",
           headers: headers(), // Use headers with API key
         };
@@ -141,7 +142,7 @@ import {
   
       update: async function(id, { title, description, tags, media, endsAt }) {
         const request = {
-          url: `${API_AUCTION_LISTINGS}/${id}`, // Use constant for individual post URL
+          url: `${API_AUCTION_LISTINGS_ID}/${id}`, // Use constant for individual post URL
           method: "PUT",
           headers: headers(), // Use headers with API key
           body: JSON.stringify({ title, description, tags, media, endsAt }),
@@ -163,7 +164,7 @@ import {
   
       delete: async function(id) {
         const request = {
-          url: `${API_AUCTION_LISTINGS}/${id}`, // Use constant for individual post URL
+          url: `${API_AUCTION_LISTINGS_ID}/${id}`, // Use constant for individual post URL
           method: "DELETE",
           headers: headers(), // Use headers with API key
         };

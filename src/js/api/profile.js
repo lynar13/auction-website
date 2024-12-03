@@ -1,3 +1,4 @@
+// src/js/api/profile.js
 import { headers } from '../api/headers.js'; // Adjusted to a relative path
 import { API_AUCTION_PROFILES, API_AUCTION_PROFILES_LISTINGS } from '../api/constants.js'; // Adjusted to a relative path
 import { currentUser } from '../utilities/currentUser.js'; // Adjusted to a relative path
@@ -9,19 +10,17 @@ import { currentUser } from '../utilities/currentUser.js'; // Adjusted to a rela
 
 // Fetch profile data for the current user
 export async function readProfile(username) {
+    
   try {
-    const response = await fetch(`${API_AUCTION_PROFILES}/${username}`, {
+      const response = await fetch(`${API_AUCTION_PROFILES}/${username}`, {
       method: 'GET',
       headers: headers(), // Use headers to include the API key and authorization token
     });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to load profile');
+    const result = await response.json();
+    if (!response.ok || !result.data) {
+    throw new Error(result.message || 'Unexpected API response');
     }
-
-    const { data } = await response.json();
-    return data; // Return the profile data
+    return result.data;
   } catch (error) {
     console.error('Error reading profile:', error);
     throw error;

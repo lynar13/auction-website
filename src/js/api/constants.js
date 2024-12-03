@@ -31,4 +31,4 @@ export const API_AUCTION_LISTINGS_TAG = (tag) => `${API_AUCTION_LISTINGS}?tag=${
 
 export const API_AUCTION_PROFILES_LISTINGS = (name) => `${API_AUCTION}/profiles/${name}/listings`;
 
-export const API_AUCTION_LISTINGS_SEARCH = `${API_AUCTION_LISTING}/search`;
+export const API_AUCTION_LISTINGS_SEARCH = `${API_AUCTION_LISTINGS}/search`;

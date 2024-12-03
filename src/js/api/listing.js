@@ -32,34 +32,30 @@ import { currentUser } from "../utilities/currentUser.js";
 
 /* Create new listing */
 export async function createListing(data) {
-  const user = currentUser();
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('You must be logged in to create a listing.');
 
-  /* Check if user is logged in and token is available */
-  if (!user || !localStorage.getItem('token')) {
-    console.error("User is not logged in or token is missing");
-    window.location.href = "/auth/login/index.html"; // Redirect to login page
-    return;
+  const response = await fetch(API_AUCTION_LISTINGS, {
+    method: 'POST',
+    headers: headers(true, true), // Include Authorization
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create listing');
   }
 
-  try {
-    const response = await fetch(API_AUCTION_LISTINGS, {
-      method: "POST",
-      headers: headers(true, true), 
-      body: JSON.stringify(data),
-    });
+  const createdListing = await response.json();
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Listing creation failed');
-    }
+  // Add credits to the user's account upon successful listing
+  const user = JSON.parse(localStorage.getItem('user'));
+  user.credits += data.startingBid || 0; // Increment user credits (optional logic for initial bids)
+  localStorage.setItem('user', JSON.stringify(user));
 
-    const result = await response.json();
-    return result.data; 
-  } catch (error) {
-    console.error('Error creating listing:', error);
-    throw new Error('Failed to create listing: ' + error.message);
-  }
+  return createdListing;
 }
+
 
 /* Get a specific post by ID */
 export async function readListing(id) {
@@ -84,7 +80,7 @@ export async function readListing(id) {
 /* Update a listing by ID */
 export async function updateListing(id, data) {
   try {
-    const response = await fetch(API_AUCTION_LISTINGS_ID(id), {
+    const response = await fetch (API_AUCTION_LISTINGS_ID(id), {
       method: "PUT",
       headers: headers(true, true), // Include Content-Type and Authorization
       body: JSON.stringify(data),
@@ -135,8 +131,8 @@ export async function readListings(page = 1, perPage = 12, query = '', sort = ''
   if (sort) params.append("_sort", sort); // Add sorting parameter if provided
 
   const url = query
-    ? `${API_SOCIAL_POSTS_SEARCH}?${params.toString()}` // Use search endpoint if query exists
-    : `${API_SOCIAL_POSTS}?${params.toString()}`;
+    ? `${API_AUCTION_LISTINGS_SEARCH}?${params.toString()}` // Use search endpoint if query exists
+    : `${API_AUCTION_LISTINGS}?${params.toString()}`;
 
   try {
     console.log("Fetching posts from:", url);
@@ -154,6 +150,8 @@ export async function readListings(page = 1, perPage = 12, query = '', sort = ''
     throw new Error("Failed to fetch posts: " + error.message);
   }
 }
+
+
 
 
   

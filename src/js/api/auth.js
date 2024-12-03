@@ -54,10 +54,12 @@ export async function register(data) {
     const response = await fetch(API_AUTH_REGISTER, {
       method: 'POST',
       headers: headers(true), // Include Content-Type but exclude Authorization
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        ...data,
+        credits: 1000, // Add initial credits for the user
+      }),
     });
 
-    // Log the response for debugging
     console.log('Registration Response:', response);
 
     if (!response.ok) {
@@ -68,8 +70,7 @@ export async function register(data) {
     const responseData = await response.json();
     console.log('Registration Response Data:', responseData);
 
-    // Check if the response contains the expected fields
-    const { data: userData } = responseData; // Use correct structure as returned by server
+    const { data: userData } = responseData;
 
     if (!userData || !userData.email) {
       console.error('Invalid user data structure received during registration:', responseData);
@@ -82,14 +83,17 @@ export async function register(data) {
     const { accessToken, ...user } = await login({ email: userData.email, password: data.password });
 
     // Store the returned user and token in localStorage
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify({ ...user, credits: 1000 })); // Include credits in user data
     localStorage.setItem('token', accessToken);
 
     console.log('User data stored successfully after registration and login:', { user, accessToken });
 
     return { user, accessToken };
   } catch (error) {
-    console.error('Error during registration:', error.message);
-    throw new Error('Registration failed: ' + error.message);
+    if (error.message.includes('429')) {
+      alert('Too many requests. Please wait and try again.');
+    } else {
+      alert('Registration failed. Please try again later.');
+    }
   }
 }
