@@ -1,6 +1,6 @@
 // src/js/api/profile.js
 import { headers } from '../api/headers.js'; // Adjusted to a relative path
-import { API_AUCTION_PROFILES, API_AUCTION_PROFILES_LISTINGS } from '../api/constants.js'; // Adjusted to a relative path
+import { API_AUCTION_PROFILES } from '../api/constants.js'; // Adjusted to a relative path
 import { currentUser } from '../utilities/currentUser.js'; // Adjusted to a relative path
 
 /*
@@ -10,7 +10,6 @@ import { currentUser } from '../utilities/currentUser.js'; // Adjusted to a rela
 
 // Fetch profile data for the current user
 export async function readProfile(username) {
-    
   try {
       const response = await fetch(`${API_AUCTION_PROFILES}/${username}`, {
       method: 'GET',

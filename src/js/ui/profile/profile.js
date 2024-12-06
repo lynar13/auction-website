@@ -28,14 +28,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Load user listings
   try {
     const listings = await readUserListings(user.username);
-    const userPostsContainer = document.getElementById('userPosts');
+    const userListingsContainer = document.getElementById('userListings');
     if (Array.isArray(listings)) {
-      userPostsContainer.innerHTML = listings.map(listing => `
+      userListingsContainer.innerHTML = listings.map(listing => `
         <div class="col-md-4">
           <div class="card mb-4">
             <div class="card-body">
               <h5 class="card-title">${listing.title}</h5>
-              <p class="card-text">${listing.description}</p>
+              <p class="card-description">${listing.description}</p>
+              <p class="text-muted"><strong>Ends At:</strong> ${new Date(listing.endsAt).toLocaleString()}</p>
+              <a href="/listing/edit.html?id=${listing.id}" class="btn btn-primary">Edit Listing</a>
+              <a href="/listing/delete.html?id=${listing.id}" class="btn btn-danger">Delete Listing</a>
               <a href="/listing/index.html?id=${listing.id}" class="btn btn-primary">View Listing</a>
             </div>
           </div>

@@ -1,37 +1,52 @@
-// src/js/ui/listing/view.js
 import { readListings } from '/src/js/api/listing.js';
 
 let currentPage = 1;
-let postsPerPage = 12;
+let listingsPerPage = 12;
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadPosts(currentPage, postsPerPage);
+  loadListings(currentPage, listingsPerPage);
   setupPaginationControls();
 });
 
 // Load listings based on the current page and limit
-async function loadPosts(page, limit) {
+async function loadListings(page, limit) {
   try {
-    const posts = await readListings(page, limit);
-    const postList = document.getElementById('postList');
-    postList.innerHTML = ''; // Clear existing posts
+    const listings = await readListings(page, limit);
+    const listingList = document.getElementById('listingList');
+    listingList.innerHTML = ''; // Clear existing listings
 
-    posts.forEach(post => {
+    listings.forEach((listing) => {
       const postCard = document.createElement('div');
       postCard.className = 'col-md-4 mb-4';
+
+      const mediaGallery = listing.media && listing.media.length
+        ? `<div class="media-gallery">
+             <img src="${listing.media[0]}" alt="${listing.title || 'Untitled'}" class="img-fluid rounded mb-3">
+           </div>`
+        : `<div class="media-gallery">
+             <img src="https://url.com/image.jpg" alt="Default Image" class="img-fluid rounded mb-3">
+           </div>`;
+
+      const endsAt = listing.endsAt
+        ? `<p class="text-muted"><strong>Ends At:</strong> ${new Date(listing.endsAt).toLocaleString()}</p>`
+        : `<p class="text-muted"><strong>Ends At:</strong> No expiration date</p>`;
+
       postCard.innerHTML = `
         <div class="card h-100 shadow-sm">
+          ${mediaGallery}
           <div class="card-body">
-            <h5 class="card-title">${post.title || 'Untitled'}</h5>
-            <p class="card-text">${post.body ? post.body.slice(0, 100) + '...' : 'No Content Available'}</p>
-            <a href="/listing/index.html?id=${post.id}" class="btn btn-primary">Read More</a>
+            <h5 class="card-title">${listing.title || 'Untitled'}</h5>
+            <p class="card-text">${listing.description ? listing.description.slice(0, 100) + '...' : 'No description available'}</p>
+            ${endsAt}
+            <a href="/listing/index.html?id=${listing.id}" class="btn btn-primary">Read More</a>
           </div>
         </div>
       `;
-      postList.appendChild(postCard);
+
+      listingList.appendChild(postCard);
     });
   } catch (error) {
-    console.error('Failed to load posts:', error);
+    console.error('Failed to load listings:', error);
   }
 }
 
@@ -40,9 +55,8 @@ function setupPaginationControls() {
   const paginationButtons = document.querySelectorAll('[data-page]');
   const limitButtons = document.querySelectorAll('[data-limit]');
 
-  // Ensure buttons are present in the DOM before adding listeners
   if (paginationButtons.length > 0) {
-    paginationButtons.forEach(btn => {
+    paginationButtons.forEach((btn) => {
       btn.addEventListener('click', (event) => {
         event.preventDefault();
         const page = parseInt(btn.getAttribute('data-page'));
@@ -52,35 +66,32 @@ function setupPaginationControls() {
   }
 
   if (limitButtons.length > 0) {
-    limitButtons.forEach(btn => {
+    limitButtons.forEach((btn) => {
       btn.addEventListener('click', (event) => {
         event.preventDefault();
         const limit = parseInt(btn.getAttribute('data-limit'));
-        setPostsPerPage(limit);
+        setListingsPerPage(limit);
       });
     });
   }
 }
 
-// Go to a specific page
 function goToPage(page) {
   currentPage = page;
-  loadPosts(currentPage, postsPerPage);
+  loadListings(currentPage, listingsPerPage);
   updateUrlParams();
 }
 
-// Set the number of posts per page
-function setPostsPerPage(limit) {
-  postsPerPage = limit;
-  currentPage = 1; // Reset to the first page
-  loadPosts(currentPage, postsPerPage);
+function setListingsPerPage(limit) {
+  listingsPerPage = limit;
+  currentPage = 1;
+  loadListings(currentPage, listingsPerPage);
   updateUrlParams();
 }
 
-// Update URL parameters to reflect the current page and limit
 function updateUrlParams() {
   const url = new URL(window.location);
   url.searchParams.set('page', currentPage);
-  url.searchParams.set('limit', postsPerPage);
+  url.searchParams.set('limit', listingsPerPage);
   window.history.pushState({}, '', url);
 }

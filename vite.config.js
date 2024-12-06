@@ -1,15 +1,23 @@
-// vite.config.js
-export default {
-    server: {
-      port: 5500, // Change the port number (default is 3000)
-      open: true, // Automatically open the browser on server start
-      proxy: {
-        // Set up a proxy for API requests
-        '/api': {
-          target: 'http://localhost:5000',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      }
-    }
-  };
+import { resolve } from "path";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  appType: "mpa",
+  base: "",
+  build: {
+    target: "esnext",
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "/index.html"),
+        login: resolve(__dirname, "/auth/login/index.html"),
+        register: resolve(__dirname, "/auth/register/index.html"),
+        profile: resolve(__dirname, "/profile/index.html"),
+        listing: resolve(__dirname, "/listing/index.html"),
+        editListing: resolve(__dirname, "/listing/edit/index.html"),
+        createListing: resolve(__dirname, "/listing/create/index.html"),
+        bids: resolve(__dirname, "/bids/index.html"),
+        listings: resolve(__dirname, "/listings/index.html"),
+      },
+    },
+  },
+});

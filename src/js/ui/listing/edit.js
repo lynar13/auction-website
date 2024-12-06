@@ -2,34 +2,42 @@ import { readListing, updateListing } from '/src/js/api/listing.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const postId = urlParams.get('id');
-  const form = document.getElementById('editPostForm');
+  const listingId = urlParams.get('id');
+  const form = document.getElementById('editlListingForm');
   
   if (!postId) {
-    alert('No post ID specified.');
+    alert('No listing ID specified.');
     return;
   }
 
   try {
-    const post = await readListing(postId);
-    if (!post || !post.data) throw new Error('Post data not found');
+    const listing = await readListing(listingId);
+    if (!listing || !listing.data) throw new Error('Listing data not found');
 
-    const postData = post.data; // Access the nested data property
+    const listingData = listing.data; // Access the nested data property
 
     // Ensure that form and its fields exist before populating them
     if (form) {
       const titleField = form.querySelector('#title');
-      const bodyField = form.querySelector('#body');
+      const descriptionField = form.querySelector('#description');
+      const endsAtField = form.querySelector('#endsAt');
+      const mediaField = form.querySelector('#media');
       const tagsField = form.querySelector('#tags');
 
       if (titleField) {
-        titleField.value = postData.title || 'No Title Available';
+        titleField.value = listingData.title || 'No Title Available';
       }
-      if (bodyField) {
-        bodyField.value = postData.body || 'No Content Available';
+      if (descriptionField) {
+        descriptionField.value = listingData.description || 'No Content Available';
       }
       if (tagsField) {
-        tagsField.value = Array.isArray(postData.tags) ? postData.tags.join(', ') : '';
+        tagsField.value = Array.isArray(listingData.tags) ? listingData.tags.join(', ') : '';
+      }
+      if (mediaField) {
+        mediaField.value = Array.isArray(listingData.media)? listingData.media.join('\n') : '';
+      }
+      if (endsAtField) {
+        endsAtField.valueAsDate = listingData.endsAt? new Date(listingData.endsAt) : null;
       }
 
       // Handle form submission
@@ -43,8 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         try {
           // Update the post using the modified payload structure
-          await updateListing(postId, updatedData);
-          window.location.href = `/listing/index.html?id=${postId}`;
+          await updateListing(listingId, updatedData);
+          window.location.href = `/listing/index.html?id=${listingId}`;
         } catch (error) {
           console.error('Failed to update listing:', error);
           alert('Failed to update listing');

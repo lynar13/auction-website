@@ -15,7 +15,7 @@
   <header class="navbar navbar-expand-lg navbar-light bg-dark py-3">
     <nav class="container">
       <div><a href="/index.html" class="navbar-brand d-flex align-items-center">
-        <img src="/public/images/logo.png" alt="Auction Logo" id="auction-logo" class="me-2" />
+        <img src="/images/logo.png" alt="Auction Logo" id="auction-logo" class="me-2" />
         </a>
       </div>
       <div class="ms-auto d-flex align-items-center">
@@ -27,19 +27,19 @@
   <main class="container my-5">
       <!-- Profile Section -->
       <section class="card p-4 shadow-sm">
-        <div class="text-center mb-4">
-          <img src="/public/images/avatar.jpeg" alt="Profile Image" id="profileImage" class="rounded-circle" width="150" />
-          <button id="updateAvatarButton" class="btn btn-link mt-2">Update Avatar</button>
-          <input type="file" id="avatarInput" class="d-none" accept="image/*" />
-        </div>
-        <h1 class="text-center mb-4" id="username"></h1>
-        <p class="text-center text-muted" id="credits">Credits: 0</p>
+          <div class="text-center mb-4">
+            <img src="/images/avatar.jpeg" alt="Profile Image" id="profileImage" class="rounded-circle" width="150" />
+            <button id="updateAvatarButton" class="btn btn-link mt-2">Update Avatar</button>
+            <input type="file" id="avatarInput" class="d-none" accept="image/*" />
+          </div>
+          <h1 class="text-center mb-4" id="username"></h1>
+          <p class="text-center text-muted" id="credits">Credits: 0</p>
       </section>
 
-      <!-- User Posts Section -->
+      <!-- User Listings Section -->
       <section class="mt-5">
         <h2 class="mb-4">My Listings</h2>
-        <div id="userPosts" class="row">
+        <div id="userLists" class="row">
           <!-- User posts will be dynamically populated here -->
         </div>
       </section>

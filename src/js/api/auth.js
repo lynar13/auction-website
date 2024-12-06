@@ -43,8 +43,12 @@ export async function login(data) {
 
     return { user, accessToken };
   } catch (error) {
-    console.error('Error during login:', error);
-    throw new Error('Login failed: ' + error.message);
+    if (error.message.includes('Too many requests')) {
+      alert('You are trying too frequently. Please wait and try again.');
+    } else {
+      console.error('Error logging in:', error);
+      alert('Something went wrong. Please try again later.');
+    }
   }
 }
 

@@ -135,19 +135,19 @@ export async function readListings(page = 1, perPage = 12, query = '', sort = ''
     : `${API_AUCTION_LISTINGS}?${params.toString()}`;
 
   try {
-    console.log("Fetching posts from:", url);
+    console.log("Fetching listings from:", url);
     const response = await fetch(url, {
       method: "GET",
       headers: headers(true),
     });
 
     const result = await response.json();
-    if (!response.ok) throw new Error(result.message || "Failed to fetch posts");
+    if (!response.ok) throw new Error(result.message || "Failed to fetch listings");
 
     return result.data || result;
   } catch (error) {
-    console.error("Error fetching posts:", error);
-    throw new Error("Failed to fetch posts: " + error.message);
+    console.error("Error fetching listings:", error);
+    throw new Error("Failed to fetch listings: " + error.message);
   }
 }
 

@@ -24,23 +24,67 @@
               </div>
               <h1 class="card-title text-center mb-4">Edit Listing</h1>
               
-              <form id="editPostForm">
-                <div class="mb-3">
+              <form id="editListingForm">
+                 <!-- Title -->
+                 <div class="mb-3">
                   <label for="title" class="form-label">Title</label>
-                  <input type="text" name="title" id="title" class="form-control" required />
+                  <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    class="form-control"
+                    required
+                  />
                 </div>
-                
+
+                <!-- End Date -->
                 <div class="mb-3">
-                  <label for="body" class="form-label">Body</label>
-                  <textarea name="body" id="body" class="form-control" rows="5" required></textarea>
+                  <label for="endDate" class="form-label">End Date</label>
+                  <input
+                    type="date"
+                    name="endDate"
+                    id="endDate"
+                    class="form-control"
+                    required
+                  />
                 </div>
-                
+
+                <!-- Media Gallery -->
+                <div class="mb-3">
+                  <label for="media" class="form-label">Media URLs</label>
+                  <input
+                    type="text"
+                    name="media"
+                    id="media"
+                    class="form-control"
+                    placeholder="Add comma-separated media URLs"
+                  />
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                  <label for="description" class="form-label">Description</label>
+                  <textarea
+                    name="description"
+                    id="description"
+                    class="form-control"
+                    rows="5"
+                    required
+                  ></textarea>
+                </div>
+
+                <!-- Tags -->
                 <div class="mb-3">
                   <label for="tags" class="form-label">Tags</label>
-                  <input type="text" name="tags" id="tags" class="form-control" placeholder="Comma-separated tags" />
+                  <input
+                    type="text"
+                    name="tags"
+                    id="tags"
+                    class="form-control"
+                    placeholder="Comma-separated tags"
+                  />
                 </div>
-                
-                <button type="submit" class="btn btn-primary w-100">Update Post</button>
+                <button type="submit" class="btn btn-primary w-100">Update Listing</button>
               </form>
             </div>
           </div>

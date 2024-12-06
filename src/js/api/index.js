@@ -100,7 +100,7 @@ import {
     listing = {
       create: async function({ title, description, tags, media, endsAt }) {
         const request = {
-          url: API_AUCTION_LISTINGS, // Use constant for posts URL
+          url: API_AUCTION_LISTINGS, // Use constant for listings URL
           method: "POST",
           headers: headers(true), // Use headers with API key
           body: JSON.stringify({ title, description, tags, media, endsAt }),
