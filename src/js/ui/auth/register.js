@@ -1,3 +1,4 @@
+// src/js/ui/auth/register.js
 import { register } from '../../api/auth.js'; // Changed to a relative path
 
 export async function onRegister(event) {

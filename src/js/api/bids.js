@@ -1,3 +1,4 @@
+import { API_AUCTION_LISTINGS_BIDS } from "./constants";
 export async function placeBid(listingId, amount, token) {
     const user = JSON.parse(localStorage.getItem('user'));
   
@@ -5,7 +6,7 @@ export async function placeBid(listingId, amount, token) {
       throw new Error('Insufficient credits to place this bid.');
     }
   
-    const response = await fetch(`https://v2.api.noroff.dev/auction/listings/${listingId}/bids`, {
+    const response = await fetch(API_AUCTION_LISTINGS_BIDS(listingId), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

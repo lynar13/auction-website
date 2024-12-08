@@ -1,3 +1,4 @@
+// src/js/ui/auth/login.js
 import { login } from '../../api/auth.js'; // Changed to a relative path
 
 export async function onLogin(event) {
@@ -31,8 +32,8 @@ export async function onLogin(event) {
       throw new Error('User or access token is undefined');
     }
   } catch (error) {
-    alert('Login failed: ' + error.message);
-    console.error("Login Error:", error);
+      alert('Login failed: ' + error.message);
+      console.error("Login Error:", error);
   }
 }
 

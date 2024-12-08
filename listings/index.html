@@ -14,17 +14,25 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container bg-dark">
-            <a href="/index.html" class="navbar-brand">Home</a>
-            <a href="/listing/create/index.html" class="navbar-brand">Create Listing</a>
-            <a class="navbar-brand align-items-center" href="/profile/index.html">My Profile</a>
-            <button id="logoutButton" class="btn btn-outline-danger ms-auto">Logout</button>
-        </div>
+  <header class="navbar navbar-expand-lg navbar-light bg-dark py-3">
+    <nav class="container">
+      <div><a href="/index.html" class="navbar-brand d-flex align-items-center">
+        <img src="/images/logo.png" alt="Auction Logo" id="auction-logo" class="me-2" />
+        </a>
+      </div>
+      <div class="ms-auto d-flex align-items-center">
+        <a class="nav-link" href="/index.html">Home</a>
+        <a class="nav-link" href="/profile/index.html">My Profile</a>
+        <a href="/listing/create/index.html" class="nav-link" id="createListingForm">Create Listing</a>
+        <a class="nav-link" href="/auth/login/index.html" id="loginButton">Login</a>
+        <a class="nav-link" href="/auth/register/index.html" id="registerButton">Register</a>
+        <button id="logoutButton" class="btn btn-outline-primary ms-2">Logout</button>
+      </div>
     </nav>
+  </header>
 
     <!-- Main Content -->
-    <div class="container my-5">
+    <div class="container my-5 bg-dark">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0">All Listings</h1>
             <!-- Pagination Controls -->

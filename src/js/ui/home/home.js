@@ -1,3 +1,4 @@
+// src/js/ui/home/home.js
 import { readListings, createListing } from '/src/js/api/listing.js';
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,17 +1,34 @@
+// src/js/ui/profile/profile.js
 import { readProfile, readUserListings, updateAvatar } from '/src/js/api/profile.js';
 import { getTotalCredit } from '/src/js/api/profile.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user.username) {
-    console.error('User not logged in or username is missing');
+  const userString = localStorage.getItem('user');
+
+  // Check for user data in localStorage
+  if (!userString) {
+    alert('User not found. Please login again.');
     window.location.href = '/auth/login/index.html';
     return;
   }
 
-  // Display credits in the profile
+  let user;
   try {
-    const profile = await readProfile(user.username);
+    user = JSON.parse(userString);
+    if (!user || typeof user !== 'object' || !user.name) {
+      throw new Error('Invalid user data');
+    }
+  } catch (error) {
+    console.error('Error parsing user from localStorage:', error);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    alert('Invalid user data. Redirecting to login.');
+    window.location.href = '/auth/login/index.html';
+    return;
+  }
+    try {
+    // Continue if token is valid
+    const profile = await readProfile();
     if (profile && profile.credits !== undefined) {
       user.credits = profile.credits;
       localStorage.setItem('user', JSON.stringify(user)); // Update localStorage
@@ -22,7 +39,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       throw new Error('Invalid profile data');
     }
   } catch (error) {
-    console.error('Error loading profile:', error.message);
+    console.error('Error validating token or loading profile:', error.message);
+    localStorage.removeItem('token');
+    window.location.href = '/auth/login/index.html';
   }
 
   // Load user listings
@@ -82,7 +101,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   
-
   // Handle total credit fetch
     try {
       const totalCredits = await getTotalCredit();

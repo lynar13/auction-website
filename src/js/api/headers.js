@@ -1,13 +1,6 @@
 // src/js/api/headers.js
-/*
- * Headers configuration
- *
- * This file contains the headers configuration for API requests.
- * It includes the API key, token, and Content-Type headers.
- */
 
 import { API_KEY } from './constants.js';
-
 
 export function headers(includeContentType = false, includeAuth = true) {
   const headers = new Headers();
@@ -20,12 +13,12 @@ export function headers(includeContentType = false, includeAuth = true) {
   }
 
   // Include Authorization header only if includeAuth is true and a token is present in localStorage
-  const token = localStorage.getItem('token');
   if (includeAuth) {
+  const token = localStorage.getItem('token');
     if (token) {
       headers.append('Authorization', `Bearer ${token}`);
     } else {
-      console.error('Authorization token is missing in localStorage.');
+      console.warn('Authorization token is missing in localStorage.');
     }
   }
 
