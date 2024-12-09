@@ -13,10 +13,8 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "server": "live-server"
-
   },
   "devDependencies": {
-
     "@eslint/js": "^9.16.0",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
@@ -24,15 +22,14 @@
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.13.0",
     "husky": "^9.1.7",
+    "jsdom": "^25.0.1",
     "prettier": "^3.4.1",
     "vite": "^5.4.1",
-    "jsdom": "^25.0.1",
     "vitest": "^2.1.6"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "gh-pages": "^6.2.0",
     "sass": "^1.81.0"
-
   }
-  
 }
