@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Redirect to the newly created post's details page
       showAlert('Listing created successfully!', 'success');
       setTimeout(() => {
-        window.location.href = `/listing/index.html?id=${listing.id}`;
+        window.location.href = `/auction-website/listing/index.html?id=${listing.id}`;
       }, 2000);
     } catch (error) {
       console.error('Error creating listing:', error);

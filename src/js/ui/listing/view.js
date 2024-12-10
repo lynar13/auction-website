@@ -14,14 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // If user is logged in, hide Login and Register buttons, and show Logout button
   if (token && user) {
-    loginButton.style.display = 'none';  // Hide Login button
-    registerButton.style.display = 'none';  // Hide Register button
-    logoutButton.style.display = 'inline-block';  // Show Logout button
+    loginButton.style.display = 'none'; // Hide Login button
+    registerButton.style.display = 'none'; // Hide Register button
+    logoutButton.style.display = 'inline-block'; // Show Logout button
   } else {
     // If user is not logged in, hide Logout button and show Login/Register buttons
-    loginButton.style.display = 'inline-block';  // Show Login button
-    registerButton.style.display = 'inline-block';  // Show Register button
-    logoutButton.style.display = 'none';  // Hide Logout button
+    loginButton.style.display = 'inline-block'; // Show Login button
+    registerButton.style.display = 'inline-block'; // Show Register button
+    logoutButton.style.display = 'none'; // Hide Logout button
   }
 
   loadListings(currentPage, listingsPerPage);
@@ -40,16 +40,16 @@ async function loadListings(page, limit) {
       postCard.className = 'col-lg-4 col-md-6 col-sm-12 mb-4';
 
       const mediaGallery = listing.media?.[0]?.url
-      ? `<img src="${listing.media[0].url}" alt="${listing.title}" class="img-fluid rounded mb-3">`
-      : `<img src="https://via.placeholder.com/400" alt="Default Image" class="img-fluid rounded mb-3">`;
+        ? `<img src="${listing.media[0].url}" alt="${listing.title}" class="img-fluid rounded mb-3">`
+        : `<img src="https://via.placeholder.com/400" alt="Default Image" class="img-fluid rounded mb-3">`;
 
       const endsAt = listing.endsAt
         ? `<p class="text-muted"><strong>Ends At:</strong> ${new Date(listing.endsAt).toLocaleString()}</p>`
         : `<p class="text-muted"><strong>Ends At:</strong> No expiration date</p>`;
-      
-        const listingLink = listing.id
-      ? `<a href="/listing/index.html?id=${encodeURIComponent(listing.id)}" class="btn btn-primary mt-auto">Place a Bid</a>`
-      : '<p class="text-muted small">No valid listing ID available.</p>';
+
+      const listingLink = listing.id
+        ? `<a href="/auction-website/listing/index.html?id=${encodeURIComponent(listing.id)}" class="btn btn-primary mt-auto">Place a Bid</a>`
+        : '<p class="text-muted small">No valid listing ID available.</p>';
 
       postCard.innerHTML = `
         <div class="card h-100 shadow-sm">
@@ -59,7 +59,7 @@ async function loadListings(page, limit) {
             <p class="card-text">${listing.description ? listing.description.slice(0, 100) + '...' : 'No description available'}</p>
             ${endsAt}
             ${listingLink}
-            <a href="/listing/index.html?id=${listing.id}" class="btn btn-primary">Read More</a>
+            <a href="/auction-website/listing/index.html?id=${listing.id}" class="btn btn-primary">Read More</a>
           </div>
         </div>
       `;

@@ -55,7 +55,7 @@ function displayListings(listings) {
 
     // Validate listing.id
     const listingLink = listing.id
-      ? `<a href="/listing/index.html?id=${encodeURIComponent(listing.id)}" class="btn btn-primary mt-auto">Place a Bid</a>`
+      ? `<a href="/auction-website/listing/index.html?id=${encodeURIComponent(listing.id)}" class="btn btn-primary mt-auto">Place a Bid</a>`
       : '<p class="text-muted small">No valid listing ID available.</p>';
 
     // Construct the post card

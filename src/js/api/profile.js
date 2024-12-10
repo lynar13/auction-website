@@ -1,12 +1,27 @@
 // src/js/api/profile.js
 import { headers } from '../api/headers.js'; // Adjusted to a relative path
 import { API_AUCTION_PROFILES } from '../api/constants.js'; // Adjusted to a relative path
-import { currentUser } from '../utilities/currentUser.js'; // Adjusted to a relative path
 
-/*
+/** 
 * Update avatar image
 * Update user's profile data
+
 */
+
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  // Redirect to login if no valid token or user
+  if (!token || !user) {
+    alert('You must log in first.');
+    window.location.href = '/auction-website/auth/login/index.html';
+    return;
+  }
+
+  // Display user info
+  document.getElementById('username').textContent = user.name || user.username;
+});
 
 // Fetch profile data for the current user
 export async function readProfile(username) {
@@ -15,11 +30,17 @@ export async function readProfile(username) {
       method: 'GET',
       headers: headers(), // Use headers to include the API key and authorization token
     });
+
     const result = await response.json();
+
     if (!response.ok || !result.data) {
     throw new Error(result.message || 'Unexpected API response');
     }
-    return result.data;
+    // Ensure the _count property is included in the returned data
+    const profileData = result.data;
+    profileData._count = profileData._count || { listings: 0, wins: 0 };
+    
+    return profileData;
   } catch (error) {
     console.error('Error reading profile:', error);
     throw error;
@@ -141,3 +162,48 @@ export async function updateAvatar(avatarUrl) {
       throw error;
     }
   }
+
+  // Fetch user's bids
+export async function readUserBids(username) {
+  try {
+    const response = await fetch(`${API_AUCTION_PROFILES}/${username}/bids`, {
+      headers: headers(true),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || 'Failed to fetch user bids');
+    return result.data || [];
+  } catch (error) {
+    console.error('Error fetching user bids:', error);
+    throw error;
+  }
+}
+
+// Fetch user's winnings
+export async function readUserWinnings(username) {
+  try {
+    const response = await fetch(`${API_AUCTION_PROFILES}/${username}/wins`, {
+      headers: headers(true),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || 'Failed to fetch user winnings');
+    return result.data || [];
+  } catch (error) {
+    console.error('Error fetching user winnings:', error);
+    throw error;
+  }
+}
+
+// Fetch listings from other users
+export async function readOthersListings() {
+  try {
+    const response = await fetch(`${API_AUCTION_LISTINGS}`, {
+      headers: headers(true),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || 'Failed to fetch others listings');
+    return result.data || [];
+  } catch (error) {
+    console.error('Error fetching others listings:', error);
+    throw error;
+  }
+}

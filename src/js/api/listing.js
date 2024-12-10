@@ -8,27 +8,6 @@ import { currentUser } from "../utilities/currentUser.js";
    * @param {string} query - The search query.
    * @returns {Promise<Array<Listing>>} - Promise that resolves to an array of found listings.
    */
-  export async function searchListings(query) {
-    const url = new URL(API_AUCTION_LISTINGS_SEARCH);
-    url.searchParams.set('search', query);
-
-    try {
-      const response = await fetch(url, {
-        headers: headers(),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Search failed');
-      }
-
-      const { data } = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error searching for listings:', error);
-      throw new Error('Failed to search listings: ' + error.message);
-    }
-  }
 
 /* Create new listing */
 export async function createListing(data) {
@@ -57,7 +36,7 @@ export async function createListing(data) {
 }
 
 
-/* Get a specific post by ID */
+/* Get a specific listing by ID */
 export async function readListing(id) {
   const url = API_AUCTION_LISTINGS_ID(id);
   

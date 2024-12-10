@@ -25,7 +25,7 @@ export const API_AUCTION_LISTINGS_ID = (id) => `${API_AUCTION}/listings/${id}`;
 
 export const API_AUCTION_PROFILES = `${API_AUCTION}/profiles`;
 
-export const API_AUCTION_PROFILES_NAME = `${API_AUCTION}/profiles/<name>`;
+export const API_AUCTION_PROFILES_NAME = `${API_AUCTION_PROFILES}/<name>`;
 
 export const API_AUCTION_LISTINGS_TAG = (tag) => `${API_AUCTION_LISTINGS}?tag=${tag}`;
 
@@ -36,3 +36,6 @@ export const API_AUCTION_LISTINGS_SEARCH = `${API_AUCTION_LISTINGS}/search`;
 export const API_AUCTION_PROFILES_BIDS = `${API_AUCTION_PROFILES_NAME}/bids`;
 
 export const API_AUCTION_PROFILES_WINNING_LISTINGS = `${API_AUCTION_PROFILES_NAME}/wins`;
+
+export const API_AUCTION_LISTINGS_BIDS = (listingId) => 
+    `https://v2.api.noroff.dev/auction/listings/${listingId}/bids`;

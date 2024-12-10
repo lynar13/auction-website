@@ -1,5 +1,9 @@
 // src/js/ui/auth/login.js
-import { login } from '../../api/auth.js'; // Changed to a relative path
+import { NoroffAPI } from '../../api/index.js'; // Import the NoroffAPI class
+import { API_AUTH, API_AUTH_LOGIN } from '../../api/constants.js';
+
+// Create an instance of NoroffAPI
+const api = new NoroffAPI();
 
 export async function onLogin(event) {
   event.preventDefault(); // Prevent the default form submission
@@ -9,31 +13,34 @@ export async function onLogin(event) {
   const data = Object.fromEntries(formData.entries());
 
   try {
-    // Call the login function and get user details
-    const { user, accessToken } = await login(data);
+    // Clear old tokens and user data
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
 
-    // Log the received user data for debugging
-    console.log('User received from login:', user);
-    console.log('Access Token received:', accessToken);
+    // Call the login method from the NoroffAPI instance
+    const { user, token: accessToken } = await api.auth.login(data);
 
-    // Ensure user and token are defined before storing in localStorage
     if (user && accessToken) {
-      // Store user details in localStorage
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('token', accessToken);
 
-      // Log to check if the values are stored correctly
-      console.log("User stored in localStorage:", JSON.parse(localStorage.getItem('user')));
-      console.log("Token stored in localStorage:", localStorage.getItem('token'));
+      console.log(
+        'User stored in localStorage:',
+        JSON.parse(localStorage.getItem('user')),
+      );
+      console.log(
+        'Token stored in localStorage:',
+        localStorage.getItem('token'),
+      );
 
-      // Redirect to the profile or home page after successful login
-      window.location.href = '/profile/index.html';
+      // Redirect to the home page
+      window.location.href = '/auction-website/index.html';
     } else {
       throw new Error('User or access token is undefined');
     }
   } catch (error) {
-      alert('Login failed: ' + error.message);
-      console.error("Login Error:", error);
+    alert('Login failed: ' + error.message);
+    console.error('Login Error:', error);
   }
 }
 
@@ -43,6 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginForm) {
     loginForm.addEventListener('submit', onLogin);
   } else {
-    console.error("Login form not found in the DOM");
+    console.error('Login form not found in the DOM');
   }
 });

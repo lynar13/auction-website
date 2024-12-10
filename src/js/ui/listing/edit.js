@@ -1,4 +1,4 @@
-import { readListing, updateListing } from '/src/js/api/listing.js';
+import { readListing, updateListing } from './src/js/api/listing.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
           // Update the post using the modified payload structure
           await updateListing(listingId, updatedData);
-          window.location.href = `/listing/index.html?id=${listingId}`;
+          window.location.href = `/auction-website/listing/index.html?id=${listingId}`;
         } catch (error) {
           console.error('Failed to update listing:', error);
           alert('Failed to update listing');

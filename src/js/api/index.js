@@ -1,20 +1,14 @@
-/*
+//src/js/api/index.js
+/** 
  * API class for handling API requests
  *
  * This class includes methods for authentication, auction listings, and profiles.
  * It also includes error handling, logging, and storage of user data in local storage.
- */
+ **/
 
 import {
   API_AUTH_LOGIN,
   API_AUTH_REGISTER,
-  API_AUCTION_LISTINGS,
-  API_AUCTION_LISTINGS_ID,
-  API_AUCTION_PROFILES_NAME,
-  API_AUCTION_LISTINGS_TAG,
-  API_AUCTION_PROFILES_BIDS,
-  API_AUCTION_PROFILES_LISTINGS,
-  API_AUCTION_PROFILES_WINNING_LISTINGS,
   API_AUCTION_LISTINGS_SEARCH
 } from './constants.js'; // Import API URLs from constants.js
 import { headers } from './headers.js'; // Import headers function from headers.js
@@ -28,7 +22,8 @@ export class NoroffAPI {
 
   get user() {
     try {
-      return JSON.parse(localStorage.user);
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) : null;
     } catch {
       return null;
     }
@@ -39,7 +34,7 @@ export class NoroffAPI {
   }
 
   get token() {
-    return localStorage.token;
+    return localStorage.getItem('token') || null;
   }
 
   set token(accessToken) {
@@ -93,136 +88,7 @@ export class NoroffAPI {
     }.bind(this), // Ensure register function is bound to the class instance
   };
 
-  // Listing-related methods
-  listing = {
-    create: async function ({ title, description, tags, media, endsAt }) {
-      const body = JSON.stringify({ title, description, tags, media, endsAt });
-
-      const response = await fetch(API_AUCTION_LISTINGS, {
-        method: 'POST',
-        headers: headers(true),
-        body,
-      });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't create listing");
-    }.bind(this),
-
-    read: async function (id) {
-      const url = API_AUCTION_LISTINGS_ID(id); // Invoke the function with `id`
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: headers(),
-      });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't read listing");
-    },
-
-    update: async function (id, { title, description, tags, media, endsAt }) {
-      const url = API_AUCTION_LISTINGS_ID(id); // Invoke the function with `id`
-      const body = JSON.stringify({ title, description, tags, media, endsAt });
-
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: headers(),
-        body,
-      });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't update listing");
-    },
-
-    delete: async function (id) {
-      const url = API_AUCTION_LISTINGS_ID(id); // Invoke the function with `id`
-
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: headers(),
-      });
-
-      if (response.ok) {
-        return true;
-      }
-
-      throw new Error("Couldn't delete listing");
-    },
-  };
-
-  // Profiles handling
-  profiles = {
-    read: async (username) => {
-      const url = API_AUCTION_PROFILES_NAME(username); // Invoke the function with `username`
-
-      const response = await fetch(url, {
-        headers: headers(),
-      });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't read profile");
-    },
-  };
-
-  // Add new methods for profiles listings, bids, winning listings, and search
-  profilesListings = {
-    read: async (username) => {
-      const url = new URL(`${API_AUCTION_PROFILES_LISTINGS.replace('<name>', username)}`);
-      const response = await fetch(url, { headers: headers() });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't read user's listings");
-    },
-  };
-
-  profilesBids = {
-    read: async (username) => {
-      const url = new URL(`${API_AUCTION_PROFILES_BIDS.replace('<name>', username)}`);
-      const response = await fetch(url, { headers: headers() });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't read user's bids");
-    },
-  };
-
-  profilesWinningListings = {
-    read: async (username) => {
-      const url = new URL(`${API_AUCTION_PROFILES_WINNING_LISTINGS.replace('<name>', username)}`);
-      const response = await fetch(url, { headers: headers() });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't read user's winning listings");
-    },
-  };
-
+ // Search and sort through listings methods
   search = {
     listings: async (query) => {
       const url = new URL(`${API_AUCTION_LISTINGS_SEARCH}?q=${query}`);
@@ -237,22 +103,5 @@ export class NoroffAPI {
     },
   };
 
-  // Tag-based listings
-  listingsTag = {
-    read: async (tag) => {
-      const url = API_AUCTION_LISTINGS_TAG(tag); // Invoke the function with `tag`
-
-      const response = await fetch(url, {
-        headers: headers(),
-      });
-
-      if (response.ok) {
-        const { data } = await response.json();
-        return data;
-      }
-
-      throw new Error("Couldn't read listings with tag");
-    },
-  };
 }
 

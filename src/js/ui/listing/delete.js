@@ -1,4 +1,4 @@
-import { deleteListing } from '/src/js/api/listing.js';
+import { deleteListing } from './src/js/api/listing.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const deleteButton = document.getElementById('deleteButton');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Listing deleted successfully');
         
         // Redirect to listings list after deletion with updated path for GitHub Pages
-        window.location.href = '/listings/index.html';
+        window.location.href = '/auction-website/listings/index.html';
       } catch (error) {
         console.error('Failed to delete listing:', error);
         alert('Failed to delete listing. Please try again.');

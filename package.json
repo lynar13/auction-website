@@ -10,12 +10,15 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "test": "vitest",
+    "test": "@playwright/test", 
     "test:watch": "vitest --watch",
-    "server": "live-server"
+    "preview": "vite",
+    "start": "vite"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.1",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-node": "^11.1.0",

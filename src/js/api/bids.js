@@ -1,4 +1,4 @@
-import { API_AUCTION_LISTINGS_BIDS } from "./constants";
+import { API_AUCTION_LISTINGS_BIDS } from "./constants.js";
 export async function placeBid(listingId, amount, token) {
     const user = JSON.parse(localStorage.getItem('user'));
   

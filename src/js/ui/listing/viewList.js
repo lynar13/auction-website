@@ -1,7 +1,6 @@
 import { readListing } from '/src/js/api/listing.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-
   const loginButton = document.getElementById('loginButton');
   const registerButton = document.getElementById('registerButton');
   const logoutButton = document.getElementById('logoutButton');
@@ -12,14 +11,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // If user is logged in, hide Login and Register buttons, and show Logout button
   if (token && user) {
-    loginButton.style.display = 'none';  // Hide Login button
-    registerButton.style.display = 'none';  // Hide Register button
-    logoutButton.style.display = 'inline-block';  // Show Logout button
+    loginButton.style.display = 'none'; // Hide Login button
+    registerButton.style.display = 'none'; // Hide Register button
+    logoutButton.style.display = 'inline-block'; // Show Logout button
   } else {
     // If user is not logged in, hide Logout button and show Login/Register buttons
-    loginButton.style.display = 'inline-block';  // Show Login button
-    registerButton.style.display = 'inline-block';  // Show Register button
-    logoutButton.style.display = 'none';  // Hide Logout button
+    loginButton.style.display = 'inline-block'; // Show Login button
+    registerButton.style.display = 'inline-block'; // Show Register button
+    logoutButton.style.display = 'none'; // Hide Logout button
   }
 
   const listingId = getListingIdFromUrl();
@@ -45,8 +44,10 @@ function getListingIdFromUrl() {
 function displayListing(listing) {
   const listingData = listing.data;
 
-  document.getElementById('title').textContent = listingData.title || 'Untitled';
-  document.getElementById('description').textContent = listingData.description || 'No description available';
+  document.getElementById('title').textContent =
+    listingData.title || 'Untitled';
+  document.getElementById('description').textContent =
+    listingData.description || 'No description available';
 
   const mediaGallery = document.getElementById('mediaGallery');
   if (listingData.media && listingData.media.length) {
@@ -66,6 +67,13 @@ function displayListing(listing) {
     ? `Ends At: ${new Date(listingData.endsAt).toLocaleString()}`
     : 'No expiration date';
 
-  const tags = document.getElementById('tags');
-  tags.textContent = 'Tags: ' + (listingData.tags.length ? listingData.tags.join(', ') : 'No Tags');
+  const countElement = document.getElementById('count');
+
+  // Check if _count exists and has the "bids" property
+  if (listingData._count && typeof listingData._count.bids === 'number') {
+    countElement.textContent = `Bids: ${listingData._count.bids}`;
+  } else {
+    // Fallback if _count or bids is not available
+    countElement.textContent = 'No bids available';
+  }
 }

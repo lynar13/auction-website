@@ -15,16 +15,16 @@
   <body>
     <header class="navbar navbar-expand-lg navbar-light bg-dark py-3">
       <nav class="container">
-        <div><a href="/index.html" class="navbar-brand d-flex align-items-center">
+        <div><a href="/auction-website/index.html" class="navbar-brand d-flex align-items-center">
           <img src="/images/logo.png" alt="Auction Logo" id="auction-logo" class="me-2" />
           </a>
         </div>
         <div class="ms-auto d-flex align-items-center">
-          <a class="nav-link" href="/index.html">Home</a>
-          <a class="nav-link" href="/profile/index.html">My Profile</a>
-          <a href="/listing/create/index.html" class="nav-link" id="createListingForm">Create Listing</a>
-          <a class="nav-link" href="/auth/login/index.html" id="loginButton">Login</a>
-          <a class="nav-link" href="/auth/register/index.html" id="registerButton">Register</a>
+          <a class="nav-link" href="/auction-website/index.html">Home</a>
+          <a class="nav-link" href="/auction-website/profile/index.html">My Profile</a>
+          <a href="/auction-website/listing/create/index.html" class="nav-link" id="createListingForm">Create Listing</a>
+          <a class="nav-link" href="/auction-website/auth/login/index.html" id="loginButton">Login</a>
+          <a class="nav-link" href="/auction-website/auth/register/index.html" id="registerButton">Register</a>
           <button id="logoutButton" class="btn btn-outline-primary ms-2">Logout</button>
         </div>
       </nav>
@@ -38,27 +38,34 @@
             <p class="card-text" id="description">Description goes here</p>
             <div id="mediaGallery" class="d-flex flex-wrap justify-content-center my-3"></div>
             <p class="text-muted" id="endsAt">Ends At: Date goes here</p>
-            <p class="text-muted" id="tags">Tags: #tag1, #tag2</p>
-          </div>
+            <p class="text-muted" id="count">Current Bids: Bids goes here</p>
         </div>
 
           <!-- Bid Section -->
-          <div class="mt-4">
+          <div class="container mt-4">
             <h2>Place a Bid</h2>
-            <form id="bidForm">
+            <form id="bidForm" class="container bg-light">
               <div class="mb-3">
                 <label for="bidAmount" class="form-label">Bid Amount</label>
-                <input type="number" id="bidAmount" class="form-control" placeholder="Enter your bid" required />
+                <input
+                  type="number"
+                  id="bidAmount"
+                  class="form-control"
+                  placeholder="Enter your bid"
+                  required
+                />
               </div>
               <button type="submit" class="btn btn-success">Place Bid</button>
             </form>
             <div id="bidMessage" class="mt-3"></div>
+            <p id="creditsDisplay">Credits: 1000</p> <!-- Replace with dynamic credit display -->
           </div>
+          
           
           <!-- Edit, View and Delete Section -->
           <div class="d-flex justify-content-between mt-4">
-            <a href="/listing/edit/index.html?id=${listingId}" id="editLink" class="btn btn-primary">Edit Listing</a>
-            <a href="/listings/index.html" class="btn btn-secondary">View Listings</a>
+            <a href="/auction-website/listing/edit/index.html?id=${listingId}" id="editLink" class="btn btn-primary">Edit Listing</a>
+            <a href="/auction-website/listings/index.html" class="btn btn-secondary">View Listings</a>
             <form id="deleteForm">
               <button type="button" id="deleteButton" class="btn btn-danger">Delete Listing</button>
             </form>
@@ -66,5 +73,24 @@
         </div>
       </div>
     </div>
+    <!-- Footer Section -->
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <p>&copy; 2024 Auction Website. All rights reserved.</p>
+      <p>
+        <a href="/auction-website/terms.html" class="text-black text-decoration-underline">Terms of Service</a> | 
+        <a href="/auction-website/privacy.html" class="text-black text-decoration-underline">Privacy Policy</a>
+      </p>
+      <p>
+        <h4>Follow us</h4>
+        <img src="public/images/facebook-svgrepo-com.svg" alt="facebook" id="socmed-logo">
+        <a href="https://lynar13.github.io/VA-Portfolio" class="text-black text-decoration-none"></a>
+        <img src="public/images/instagram-color-svgrepo-com.svg" alt="instagram" id="socmed-logo">
+        <a href="https://lynar13.github.io/VA-Portfolio" class="text-black text-decoration-none" ></a> 
+        <img src="/public/images/github-color-svgrepo-com.svg" alt="github" id="socmed-logo" >
+        <a href="https://lynar13.github.io/VA-Portfolio/" class="text-black text-decoration-none"></a>
+      </p>
+    </div>
+  </footer>
   </body>
 </html>

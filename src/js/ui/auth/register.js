@@ -1,38 +1,36 @@
 // src/js/ui/auth/register.js
-import { register } from '../../api/auth.js'; // Changed to a relative path
+import { NoroffAPI } from '../../api/index.js'; // Import the NoroffAPI class
+
+// Create an instance of NoroffAPI
+const api = new NoroffAPI();
 
 export async function onRegister(event) {
   event.preventDefault(); // Prevent default form submission
 
-  // Get form data and convert it to an object
   const form = event.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
 
-  // Log form data for debugging
   console.log('Form Data:', data);
 
   try {
-    // Call the register function and handle the response
-    const { user, accessToken } = await register(data); // Register the user
+    // Call the register method from the NoroffAPI instance
+    const { user, token: accessToken } = await api.auth.register(data);
 
-    // Verify that the user object is correctly returned
     if (!user || !accessToken) {
       throw new Error('Registration failed: No user data or access token returned');
     }
 
     console.log(`User registered successfully with name: ${user.name} and email: ${user.email}`);
 
-    // Store user and token in local storage to be used in subsequent requests
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('token', accessToken);
 
-    // Verify that localStorage has been correctly set
     console.log('Stored User in localStorage:', JSON.parse(localStorage.getItem('user')));
     console.log('Stored Token in localStorage:', localStorage.getItem('token'));
 
-    // Redirect to the profile page or home page after successful registration and login
-    window.location.href = '/profile/index.html';
+    // Redirect to the home page
+    window.location.href = '/auction-website/index.html';
   } catch (error) {
     console.error('Error during registration:', error.message);
     alert(`Registration failed: ${error.message}`);
