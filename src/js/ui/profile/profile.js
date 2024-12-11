@@ -1,52 +1,53 @@
 // src/js/ui/profile/profile.js
-import { readProfile, readUserListings, updateAvatar,
-  readUserBids, readUserWinnings, readOthersListings
- } from '/src/js/api/profile.js';
+import {
+  readProfile,
+  readUserListings,
+  updateAvatar,
+  readUserBids,
+  readUserWinnings,
+  readOthersListings,
+} from '/src/js/api/profile.js';
 import { getTotalCredit } from '/src/js/api/profile.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const userString = localStorage.getItem('user');
+  const userData = localStorage.getItem('user');
 
-  // Check for user data in localStorage
-  if (!userString) {
-    alert('User not found. Please login again.');
-    window.location.href = '/auction-website/auth/login/index.html';
-    return;
-  }
-
-  let user;
-  try {
-    user = JSON.parse(userString);
-    if (!user || typeof user !== 'object' || !user.name) {
-      throw new Error('Invalid user data');
-    }
-  } catch (error) {
-    console.error('Error parsing user from localStorage:', error);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    alert('Invalid user data. Redirecting to login.');
-    window.location.href = '/auction-website/auth/login/index.html';
-    return;
-  }
+  if (userData) {
     try {
-    // Continue if token is valid
-    const profile = await readProfile(user.username);
-    if (profile && profile.credits !== undefined) {
-      user.credits = profile.credits;
-      localStorage.setItem('user', JSON.stringify(user)); // Update localStorage
+      const user = JSON.parse(userData);
+      const token = localStorage.getItem('token');
 
-      document.getElementById('username').textContent = profile.username;
-      document.getElementById('profileImage').src = profile.avatar || './images/profile.jpeg';
-      document.getElementById('credits').textContent = `Credits: ${profile.credits || 1000}`;
-      document.getElementById('listingsCount').textContent = `Listings: ${profile._count.listings || 0}`;
-      document.getElementById('winsCount').textContent = `Wins: ${profile._count.wins || 0}`;
-    } else {
-      throw new Error('Invalid profile data');
+      // Validate token and load user data
+      if (!token || !user.username) {
+        throw new Error('Invalid token or user data');
+      }
+
+      // Continue if token is valid
+      const profile = await readProfile(user.username);
+      if (profile && profile.credits !== undefined) {
+        user.credits = profile.credits;
+        localStorage.setItem('user', JSON.stringify(user)); // Update localStorage
+
+        document.getElementById('username').textContent = profile.username;
+        document.getElementById('profileImage').src =
+          profile.avatar || './images/profile.jpeg';
+        document.getElementById('credits').textContent =
+          `Credits: ${profile.credits || 1000}`;
+        document.getElementById('listingsCount').textContent =
+          `Listings: ${profile._count.listings || 0}`;
+        document.getElementById('winsCount').textContent =
+          `Wins: ${profile._count.wins || 0}`;
+      } else {
+        throw new Error('Invalid profile data');
+      }
+    } catch (error) {
+      console.error(
+        'Error validating token or loading profile:',
+        error.message,
+      );
+      localStorage.removeItem('token');
+      window.location.href = '/auction-website/auth/login/index.html';
     }
-  } catch (error) {
-    console.error('Error validating token or loading profile:', error.message);
-    localStorage.removeItem('token');
-    window.location.href = '/auction-website/auth/login/index.html';
   }
 
   // Load user listings
@@ -54,7 +55,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const listings = await readUserListings(user.username);
     const userListingsContainer = document.getElementById('userListings');
     if (Array.isArray(listings)) {
-      userListingsContainer.innerHTML = listings.map(listing => `
+      userListingsContainer.innerHTML = listings
+        .map(
+          (listing) => `
         <div class="col-md-4">
           <div class="card mb-4">
             <div class="card-body">
@@ -67,7 +70,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
           </div>
         </div>
-      `).join('');
+      `,
+        )
+        .join('');
     } else {
       throw new Error('Listings data is not an array');
     }
@@ -79,12 +84,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const bids = await readUserBids(user.username);
     const bidsContainer = document.getElementById('userBids');
-    bidsContainer.innerHTML = bids.map(bid => `
+    bidsContainer.innerHTML = bids
+      .map(
+        (bid) => `
       <div class="card">
         <h5>Listing ID: ${bid.listingId}</h5>
         <p>Bid Amount: ${bid.amount}</p>
       </div>
-    `).join('');
+    `,
+      )
+      .join('');
   } catch (error) {
     console.error('Error loading bids:', error);
   }
@@ -93,12 +102,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const winnings = await readUserWinnings(user.username);
     const winningsContainer = document.getElementById('userWinnings');
-    winningsContainer.innerHTML = winnings.map(win => `
+    winningsContainer.innerHTML = winnings
+      .map(
+        (win) => `
       <div class="card">
         <h5>${win.title}</h5>
         <p>Winning Bid: ${win.amount}</p>
       </div>
-    `).join('');
+    `,
+      )
+      .join('');
   } catch (error) {
     console.error('Error loading winnings:', error);
   }
@@ -107,14 +120,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const otherListings = await readOthersListings();
     const othersContainer = document.getElementById('othersListings');
-    othersContainer.innerHTML = otherListings.map(listing => `
+    othersContainer.innerHTML = otherListings
+      .map(
+        (listing) => `
       <div class="card">
         <h5>${listing.title}</h5>
         <p>${listing.description}</p>
         <p>Bids: ${listing._count.bids || 0}</p>
         <a href="/auction-website/listing/index.html?id=${listing.id}" class="btn btn-primary">View Listing</a>
       </div>
-    `).join('');
+    `,
+      )
+      .join('');
   } catch (error) {
     console.error('Error loading other listings:', error);
   }
@@ -149,16 +166,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     reader.readAsDataURL(file);
   });
 
-  
   // Handle total credit fetch
-    try {
-      const totalCredits = await getTotalCredit();
-      document.getElementById('credits').textContent = `Credits: ${totalCredits}`;
-    } catch (error) {
-        console.error('Error fetching total credit:', error);
-    }
+  try {
+    const totalCredits = await getTotalCredit();
+    document.getElementById('credits').textContent = `Credits: ${totalCredits}`;
+  } catch (error) {
+    console.error('Error fetching total credit:', error);
+  }
 });
-
-  
-  
-

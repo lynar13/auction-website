@@ -22,8 +22,9 @@ export async function createListing(data) {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'Failed to create listing');
-  }
+    console.error("Error response from server:", errorData);
+    throw new Error(errorData.message || "Failed to create listing");
+  }  
 
   const createdListing = await response.json();
 
@@ -34,7 +35,6 @@ export async function createListing(data) {
 
   return createdListing;
 }
-
 
 /* Get a specific listing by ID */
 export async function readListing(id) {

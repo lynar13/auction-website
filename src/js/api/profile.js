@@ -3,9 +3,9 @@ import { headers } from '../api/headers.js'; // Adjusted to a relative path
 import { API_AUCTION_PROFILES } from '../api/constants.js'; // Adjusted to a relative path
 
 /** 
+* View or read user profile 
 * Update avatar image
 * Update user's profile data
-
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '/auction-website/auth/login/index.html';
     return;
   }
-
   // Display user info
   document.getElementById('username').textContent = user.name || user.username;
 });
+
 
 // Fetch profile data for the current user
 export async function readProfile(username) {
@@ -207,3 +207,4 @@ export async function readOthersListings() {
     throw error;
   }
 }
+
