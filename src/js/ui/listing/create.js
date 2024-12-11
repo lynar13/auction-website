@@ -1,24 +1,6 @@
 import { createListing } from '/src/js/api/listing.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const loginButton = document.getElementById('loginButton');
-  const registerButton = document.getElementById('registerButton');
-  const logoutButton = document.getElementById('logoutButton');
-
-  // Check if the user is logged in
-  const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user'));
-
-  if (token && user) {
-    loginButton.style.display = 'none';
-    registerButton.style.display = 'none';
-    logoutButton.style.display = 'inline-block';
-  } else {
-    loginButton.style.display = 'inline-block';
-    registerButton.style.display = 'inline-block';
-    logoutButton.style.display = 'none';
-  }
-
   const form = document.getElementById('createListingForm');
 
   if (!form) {

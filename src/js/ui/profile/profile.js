@@ -15,14 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (userData) {
     try {
       const user = JSON.parse(userData);
-      const token = localStorage.getItem('token');
 
-      // Validate token and load user data
-      if (!token || !user.username) {
-        throw new Error('Invalid token or user data');
-      }
-
-      // Continue if token is valid
       const profile = await readProfile(user.username);
       if (profile && profile.credits !== undefined) {
         user.credits = profile.credits;

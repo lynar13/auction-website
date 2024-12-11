@@ -4,26 +4,6 @@ let currentPage = 1;
 let listingsPerPage = 12;
 
 document.addEventListener('DOMContentLoaded', () => {
-  const loginButton = document.getElementById('loginButton');
-  const registerButton = document.getElementById('registerButton');
-  const logoutButton = document.getElementById('logoutButton');
-
-  // Check if the user is logged in (by checking token or user data)
-  const token = localStorage.getItem('token'); // Or use another method to check login status
-  const user = JSON.parse(localStorage.getItem('user'));
-
-  // If user is logged in, hide Login and Register buttons, and show Logout button
-  if (token && user) {
-    loginButton.style.display = 'none'; // Hide Login button
-    registerButton.style.display = 'none'; // Hide Register button
-    logoutButton.style.display = 'inline-block'; // Show Logout button
-  } else {
-    // If user is not logged in, hide Logout button and show Login/Register buttons
-    loginButton.style.display = 'inline-block'; // Show Login button
-    registerButton.style.display = 'inline-block'; // Show Register button
-    logoutButton.style.display = 'none'; // Hide Logout button
-  }
-
   loadListings(currentPage, listingsPerPage);
   setupPaginationControls();
 });
