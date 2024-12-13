@@ -1,11 +1,10 @@
 // src/js/ui/auth/register.js
-import { NoroffAPI } from '../../api/index.js'; // Import the NoroffAPI class
+import { NoroffAPI } from '../../api/index.js';
 
-// Create an instance of NoroffAPI
 const api = new NoroffAPI();
 
 export async function onRegister(event) {
-  event.preventDefault(); // Prevent default form submission
+  event.preventDefault();
 
   const form = event.target;
   const formData = new FormData(form);
@@ -13,31 +12,41 @@ export async function onRegister(event) {
 
   console.log('Form Data:', data);
 
+  // Validate registration data
+  try {
+    if (!data.name || !data.email || !data.password) {
+      throw new Error('All fields are required: Name, Email, and Password');
+    }
+  } catch (error) {
+    console.error('Validation Error:', error.message);
+    alert(`Registration failed: ${error.message}`);
+    return;
+  }
+
   try {
     // Call the register method from the NoroffAPI instance
-    const { user, token: accessToken } = await api.auth.register(data);
+    const { user } = await api.auth.register(data);
 
-    if (!user || !accessToken) {
-      throw new Error('Registration failed: No user data or access token returned');
+    if (!user) {
+      throw new Error('Registration failed: No user data returned');
     }
 
     console.log(`User registered successfully with name: ${user.name} and email: ${user.email}`);
 
+    // Store user in localStorage
     localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('token', accessToken);
 
     console.log('Stored User in localStorage:', JSON.parse(localStorage.getItem('user')));
-    console.log('Stored Token in localStorage:', localStorage.getItem('token'));
 
-    // Redirect to the home page
-    window.location.href = '/auction-website/index.html';
+    // Redirect to the login page
+    alert('Registration successful! Please log in to continue.');
+    window.location.href = '/auction-website/auth/login/index.html';
   } catch (error) {
     console.error('Error during registration:', error.message);
     alert(`Registration failed: ${error.message}`);
   }
 }
 
-// Attach the event listener to the form on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registerForm');
   if (form) {

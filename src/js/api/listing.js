@@ -5,11 +5,20 @@ import { API_AUCTION_LISTINGS, API_AUCTION_LISTINGS_ID, API_AUCTION_LISTINGS_SEA
 /* Create new listing */
 export async function createListing(data) {
   try {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error("No token found in localStorage. Redirecting to login.");
+      alert("You must log in to create a listing.");
+      window.location.href = '/auction-website/auth/login/index.html';
+      return;
+    }
+
     const response = await fetch('https://v2.api.noroff.dev/auction/listings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
@@ -21,20 +30,13 @@ export async function createListing(data) {
     }
 
     const createdListing = await response.json();
-
-    // Optionally update user credits (if initial bids are involved)
-    if (data.startingBid) {
-      const user = JSON.parse(localStorage.getItem('user'));
-      user.credits += data.startingBid;
-      localStorage.setItem('user', JSON.stringify(user));
-    }
-
     return createdListing;
   } catch (error) {
     console.error("Error creating listing:", error.message);
     throw error;
   }
 }
+
 
 /* Get a specific listing by ID */
 export async function readListing(id) {

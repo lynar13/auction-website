@@ -10,31 +10,22 @@ import { API_KEY } from './constants.js';
  * @returns {Headers} Configured headers for the request
  */
 
-export function headers(includeContentType = false, includeAuth = true) {
-  const headers = new Headers();
+export function headers(includeToken = true, isMultipart = false) {
+  const baseHeaders = isMultipart
+    ? {}
+    : { 'Content-Type': 'application/json' };
 
-  // Always include the API key in the headers if available
-  if (API_KEY) {
-    headers.append('X-Noroff-API-Key', API_KEY);
-  } else if (process.env.NODE_ENV === 'development') {
-    console.error('API_KEY is missing. Please check your configuration.');
-  }
-  
-
-  // Include Authorization header only if includeAuth is true and a token is present in localStorage
-  if (includeAuth) {
   const token = localStorage.getItem('token');
-    if (token) {
-      headers.append('Authorization', `Bearer ${token}`);
-    } else {
-      console.warn('Authorization token is missing in localStorage.');
-    }
+  if (includeToken && token) {
+    baseHeaders.Authorization = `Bearer ${token}`;
   }
 
-  // Include Content-Type header for JSON body if specified
-  if (includeContentType) {
-    headers.append('Content-Type', 'application/json');
+  if (API_KEY) {
+    baseHeaders['X-Noroff-API-Key'] = API_KEY;
   }
 
-  return headers;
+  if (includeToken && token) {
+    baseHeaders['Authorization'] = `Bearer ${token}`;
+  }
+  return baseHeaders;
 }

@@ -62,27 +62,24 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
   
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("You must log in to create a listing.");
+      window.location.href = '/auction-website/auth/login/index.html';
+      return;
+    }
+  
     const formData = new FormData(form);
     const postData = Object.fromEntries(formData.entries());
   
-    // Convert `tags` and `media` to arrays
     postData.tags = postData.tags ? postData.tags.split(",").map(tag => tag.trim()) : [];
     postData.media = postData.media
       ? postData.media.split(",").map(url => ({ url: url.trim(), alt: "" }))
       : [];
   
-    // Ensure `endsAt` is formatted correctly
     if (postData.endsAt) {
       postData.endsAt = new Date(postData.endsAt).toISOString();
     }
-  
-    // Validate media URLs
-    if (!validateMediaURLs(postData.media)) {
-      showAlert('Invalid media URLs. Ensure all URLs are publicly accessible.', 'danger');
-      return;
-    }
-  
-    console.log("Data being sent to createListing:", postData);
   
     if (!validateForm(postData)) return;
   
@@ -94,20 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 2000);
     } catch (error) {
       console.error("Error creating listing:", error.message);
-      showAlert('Failed to create listing. Please try again.', 'danger');
+      showAlert(`Failed to create listing: ${error.message}`, 'danger');
     }
   });
   
-  // Helper function to validate media URLs
-  function validateMediaURLs(media) {
-    return media.every(item => {
-      try {
-        const url = new URL(item.url);
-        return url.protocol === "http:" || url.protocol === "https:";
-      } catch {
-        return false;
-      }
-    });
-  }
   
 });
