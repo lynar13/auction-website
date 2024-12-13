@@ -8,6 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  // Validate and initialize user
+  let user = localStorage.getItem('user');
+  if (!user) {
+    console.error('User not found in localStorage. Redirecting to login.');
+    alert('You must log in first.');
+    window.location.href = '/auction-website/auth/login/index.html';
+    return;
+  }
+
+  try {
+    user = JSON.parse(user);
+  } catch (error) {
+    console.error('Invalid user data in localStorage:', error);
+    alert('Invalid user data. Please log in again.');
+    localStorage.removeItem('user');
+    window.location.href = '/auction-website/auth/login/index.html';
+    return;
+  }
+
   function showAlert(message, type = 'danger') {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} mt-3`;
@@ -42,21 +61,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-
+  
     const formData = new FormData(form);
     const postData = Object.fromEntries(formData.entries());
-
+  
+    // Convert `tags` and `media` to arrays
     postData.tags = postData.tags ? postData.tags.split(",").map(tag => tag.trim()) : [];
-    postData.media = postData.media ? postData.media.split(",").map(url => url.trim()) : [];
+    postData.media = postData.media
+      ? postData.media.split(",").map(url => ({ url: url.trim(), alt: "" }))
+      : [];
+  
+    // Ensure `endsAt` is formatted correctly
     if (postData.endsAt) {
       postData.endsAt = new Date(postData.endsAt).toISOString();
-      delete postData.endsAt;
     }
-
-    if (!validateForm(postData)) return;
-
+  
+    // Validate media URLs
+    if (!validateMediaURLs(postData.media)) {
+      showAlert('Invalid media URLs. Ensure all URLs are publicly accessible.', 'danger');
+      return;
+    }
+  
     console.log("Data being sent to createListing:", postData);
-
+  
+    if (!validateForm(postData)) return;
+  
     try {
       const listing = await createListing(postData);
       showAlert('Listing created successfully!', 'success');
@@ -64,8 +93,21 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = `/auction-website/listing/index.html?id=${listing.id}`;
       }, 2000);
     } catch (error) {
-      console.error("Error creating listing:", error);
+      console.error("Error creating listing:", error.message);
       showAlert('Failed to create listing. Please try again.', 'danger');
     }
   });
+  
+  // Helper function to validate media URLs
+  function validateMediaURLs(media) {
+    return media.every(item => {
+      try {
+        const url = new URL(item.url);
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    });
+  }
+  
 });

@@ -9,13 +9,12 @@
 import {
   API_AUTH_LOGIN,
   API_AUTH_REGISTER,
-  API_AUCTION_LISTINGS_SEARCH
-} from './constants.js'; // Import API URLs from constants.js
-import { headers } from './headers.js'; // Import headers function from headers.js
+  API_AUCTION_LISTINGS_SEARCH,
+} from './constants.js';
+import { headers } from './headers.js';
 
 export class NoroffAPI {
   constructor() {
-    // Bind auth methods to the class instance
     this.auth.login = this.auth.login.bind(this);
     this.auth.register = this.auth.register.bind(this);
   }
@@ -41,14 +40,13 @@ export class NoroffAPI {
     localStorage.setItem('token', accessToken);
   }
 
-  // Authentication methods
   auth = {
     login: async function ({ email, password }) {
       const body = JSON.stringify({ email, password });
 
       const response = await fetch(API_AUTH_LOGIN, {
         method: 'POST',
-        headers: headers(true), // Use the headers function to set the API key
+        headers: headers(true),
         body,
       });
 
@@ -71,24 +69,25 @@ export class NoroffAPI {
 
       const response = await fetch(API_AUTH_REGISTER, {
         method: 'POST',
-        headers: headers(true), // Ensure headers include Content-Type: application/json
+        headers: headers(true),
         body,
       });
 
       if (response.ok) {
         const { data } = await response.json();
         const { accessToken: token, ...user } = data;
+
         localStorage.token = token;
         localStorage.user = JSON.stringify(user);
-        return { user, token }; // Return the correctly formatted data
+
+        return { user, token };
       }
 
       const errorData = await response.json();
       throw new Error(errorData.message || "Couldn't register");
-    }.bind(this), // Ensure register function is bound to the class instance
+    }.bind(this),
   };
 
- // Search and sort through listings methods
   search = {
     listings: async (query) => {
       const url = new URL(`${API_AUCTION_LISTINGS_SEARCH}?q=${query}`);
@@ -102,6 +101,4 @@ export class NoroffAPI {
       throw new Error("Couldn't search listings");
     },
   };
-
 }
-

@@ -1,57 +1,57 @@
 // src/js/api/listings.js
 import { headers } from "./headers.js";
 import { API_AUCTION_LISTINGS, API_AUCTION_LISTINGS_ID, API_AUCTION_LISTINGS_SEARCH } from "./constants.js";
-import { currentUser } from "../utilities/currentUser.js"; 
-
-/*
-   * Search for listings based on query.
-   * @param {string} query - The search query.
-   * @returns {Promise<Array<Listing>>} - Promise that resolves to an array of found listings.
-   */
 
 /* Create new listing */
 export async function createListing(data) {
-  const token = localStorage.getItem('token');
-  if (!token) throw new Error('You must be logged in to create a listing.');
+  try {
+    const response = await fetch('https://v2.api.noroff.dev/auction/listings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(data),
+    });
 
-  const response = await fetch(API_AUCTION_LISTINGS, {
-    method: 'POST',
-    headers: headers(true, true), // Include Authorization
-    body: JSON.stringify(data),
-  });
+    if (!response.ok) {
+      const responseData = await response.json();
+      console.error("Error response from server:", responseData.errors || responseData.message);
+      throw new Error(responseData.errors?.[0]?.message || 'Failed to create listing');
+    }
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Error response from server:", errorData);
-    throw new Error(errorData.message || "Failed to create listing");
-  }  
+    const createdListing = await response.json();
 
-  const createdListing = await response.json();
+    // Optionally update user credits (if initial bids are involved)
+    if (data.startingBid) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      user.credits += data.startingBid;
+      localStorage.setItem('user', JSON.stringify(user));
+    }
 
-  // Add credits to the user's account upon successful listing
-  const user = JSON.parse(localStorage.getItem('user'));
-  user.credits += data.startingBid || 0; // Increment user credits (optional logic for initial bids)
-  localStorage.setItem('user', JSON.stringify(user));
-
-  return createdListing;
+    return createdListing;
+  } catch (error) {
+    console.error("Error creating listing:", error.message);
+    throw error;
+  }
 }
 
 /* Get a specific listing by ID */
 export async function readListing(id) {
   const url = API_AUCTION_LISTINGS_ID(id);
-  
+
   try {
     const response = await fetch(url, {
       method: "GET",
       headers: headers(true),
     });
-    
+
     if (!response.ok) throw new Error("Failed to fetch listing");
-    
+
     const data = await response.json();
-    return data; 
+    return data;
   } catch (error) {
-    console.error('Error fetching listing:', error);
+    console.error("Error fetching listing:", error.message);
     throw error;
   }
 }
@@ -59,7 +59,7 @@ export async function readListing(id) {
 /* Update a listing by ID */
 export async function updateListing(id, data) {
   try {
-    const response = await fetch (API_AUCTION_LISTINGS_ID(id), {
+    const response = await fetch(API_AUCTION_LISTINGS_ID(id), {
       method: "PUT",
       headers: headers(true, true), // Include Content-Type and Authorization
       body: JSON.stringify(data),
@@ -69,10 +69,10 @@ export async function updateListing(id, data) {
       const errorData = await response.json();
       throw new Error(errorData.message || "Failed to update listing");
     }
-    
+
     return await response.json();
   } catch (error) {
-    console.error("Error updating listing:", error);
+    console.error("Error updating listing:", error.message);
     throw new Error("Failed to update listing: " + error.message);
   }
 }
@@ -90,11 +90,11 @@ export async function deleteListing(id) {
     }
 
     const text = await response.text();
-    if (!text) return {}; 
+    if (!text) return {};
 
     return JSON.parse(text);
   } catch (error) {
-    console.error('Error during listing deletion:', error);
+    console.error("Error during listing deletion:", error.message);
     throw new Error("Failed to delete listing: " + error.message);
   }
 }
@@ -125,12 +125,7 @@ export async function readListings(page = 1, perPage = 12, query = '', sort = ''
 
     return result.data || result;
   } catch (error) {
-    console.error("Error fetching listings:", error);
+    console.error("Error fetching listings:", error.message);
     throw new Error("Failed to fetch listings: " + error.message);
   }
 }
-
-
-
-
-  

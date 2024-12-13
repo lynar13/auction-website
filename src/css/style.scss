@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 // Custom Theme Colors
-$primary-color: #ff6b6b;
-$secondary-color: #333;
+$primary-color: #cd3a70;
+$secondary-color: #322b2b;
 $background-color: #f7f7f7;
 $navbar-bg-color: #c13737;
 
@@ -90,6 +90,18 @@ section .card {
   color: $primary-color;
   margin-bottom: 1rem;
 }
+
+// Profiles section
+#username {
+  color: $primary-color;
+}
+
+#userListings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+} 
+
 
 // Customizing the card layout
 #listingList {

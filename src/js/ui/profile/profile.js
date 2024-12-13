@@ -1,132 +1,117 @@
 // src/js/ui/profile/profile.js
+
 import {
   readProfile,
   readUserListings,
   updateAvatar,
   readUserBids,
   readUserWinnings,
-  readOthersListings,
 } from '/src/js/api/profile.js';
 import { getTotalCredit } from '/src/js/api/profile.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const userData = localStorage.getItem('user');
+  // Validate and initialize user
+  let user = localStorage.getItem('user');
+  if (!user) {
+    console.error('User not found in localStorage. Redirecting to login.');
+    alert('You must log in first.');
+    window.location.href = '/auction-website/auth/login/index.html';
+    return;
+  }
 
-  if (userData) {
-    try {
-      const user = JSON.parse(userData);
+  try {
+    user = JSON.parse(user);
+  } catch (error) {
+    console.error('Invalid user data in localStorage:', error);
+    alert('Invalid user data. Please log in again.');
+    localStorage.removeItem('user');
+    window.location.href = '/auction-website/auth/login/index.html';
+    return;
+  }
 
-      const profile = await readProfile(user.username);
-      if (profile && profile.credits !== undefined) {
-        user.credits = profile.credits;
-        localStorage.setItem('user', JSON.stringify(user)); // Update localStorage
+  // Load profile data
+  try {
+    const profile = await readProfile(user.name);
+    if (profile) {
+      localStorage.setItem('user', JSON.stringify(profile));
+      user = profile;
 
-        document.getElementById('username').textContent = profile.username;
-        document.getElementById('profileImage').src =
-          profile.avatar || './images/profile.jpeg';
-        document.getElementById('credits').textContent =
-          `Credits: ${profile.credits || 1000}`;
-        document.getElementById('listingsCount').textContent =
-          `Listings: ${profile._count.listings || 0}`;
-        document.getElementById('winsCount').textContent =
-          `Wins: ${profile._count.wins || 0}`;
-      } else {
-        throw new Error('Invalid profile data');
-      }
-    } catch (error) {
-      console.error(
-        'Error validating token or loading profile:',
-        error.message,
-      );
-      localStorage.removeItem('token');
-      window.location.href = '/auction-website/auth/login/index.html';
+      // Update UI
+      document.getElementById('username').textContent = user.name || 'Unknown';
+      document.getElementById('avatar').src = user.avatar?.url || './images/profile.jpeg';
+      document.getElementById('credits').textContent = `Credits: ${user.credits || 0}`;
+      document.getElementById('listingsCount').textContent = `Listings: ${user._count?.listings || 0}`;
+      document.getElementById('winsCount').textContent = `Wins: ${user._count?.wins || 0}`;
+    } else {
+      throw new Error('Invalid profile data');
     }
+  } catch (error) {
+    console.error('Error validating token or loading profile:', error.message);
   }
 
   // Load user listings
   try {
-    const listings = await readUserListings(user.username);
-    const userListingsContainer = document.getElementById('userListings');
-    if (Array.isArray(listings)) {
-      userListingsContainer.innerHTML = listings
-        .map(
-          (listing) => `
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">${listing.title}</h5>
-              <p class="card-description">${listing.description}</p>
-              <p class="text-muted"><strong>Ends At:</strong> ${new Date(listing.endsAt).toLocaleString()}</p>
-              <a href="/auction-website/listing/edit.html?id=${listing.id}" class="btn btn-primary">Edit Listing</a>
-              <a href="/auction-website/listing/delete.html?id=${listing.id}" class="btn btn-danger">Delete Listing</a>
-              <a href="/auction-website/listing/index.html?id=${listing.id}" class="btn btn-primary">View Listing</a>
-            </div>
+    const listings = await readUserListings(user.name);
+    const userListings = document.getElementById('userListings');
+
+    listings.forEach((listing) => {
+      if (!listing || !listing.title || !listing.id) return;
+
+      const postCard = document.createElement('div');
+      postCard.className = 'col-lg-4 col-md-6 col-sm-12 mb-4';
+
+      const mediaGallery = listing.media?.[0]?.url || 'https://via.placeholder.com/400';
+      const endsAt = listing.endsAt
+        ? new Date(listing.endsAt).toLocaleString()
+        : 'No expiration date';
+
+      postCard.innerHTML = `
+        <div class="card h-100 shadow-sm">
+          <img src="${mediaGallery}" alt="${listing.title}" class="img-fluid rounded mb-3">
+          <div class="card-body">
+            <h5 class="card-title">${listing.title || 'Untitled'}</h5>
+            <p class="card-text">${listing.description ? listing.description.slice(0, 100) + '...' : 'No description available'}</p>
+            <p class="text-muted"><strong>Ends At:</strong> ${endsAt}</p>
+            <a href="/auction-website/listing/index.html?id=${encodeURIComponent(listing.id)}" class="btn btn-primary mt-auto">Place a Bid</a>
           </div>
         </div>
-      `,
-        )
-        .join('');
-    } else {
-      throw new Error('Listings data is not an array');
-    }
+      `;
+      userListings.appendChild(postCard);
+    });
   } catch (error) {
-    console.error('Error loading listings:', error.message);
+    console.error('Failed to load listings:', error.message);
   }
 
   // Display user's bids
   try {
-    const bids = await readUserBids(user.username);
+    const bids = await readUserBids(user.name);
     const bidsContainer = document.getElementById('userBids');
-    bidsContainer.innerHTML = bids
-      .map(
-        (bid) => `
-      <div class="card">
-        <h5>Listing ID: ${bid.listingId}</h5>
-        <p>Bid Amount: ${bid.amount}</p>
-      </div>
-    `,
-      )
-      .join('');
+    bidsContainer.innerHTML = bids.length
+      ? bids.map(bid => `
+        <div class="card">
+          <h5>Listing ID: ${bid.listingId}</h5>
+          <p>Bid Amount: ${bid.amount}</p>
+        </div>
+      `).join('')
+      : '<p>No bids found.</p>';
   } catch (error) {
-    console.error('Error loading bids:', error);
+    console.error('Error loading bids:', error.message);
   }
 
   // Display user's winnings
   try {
-    const winnings = await readUserWinnings(user.username);
+    const winnings = await readUserWinnings(user.name);
     const winningsContainer = document.getElementById('userWinnings');
-    winningsContainer.innerHTML = winnings
-      .map(
-        (win) => `
-      <div class="card">
-        <h5>${win.title}</h5>
-        <p>Winning Bid: ${win.amount}</p>
-      </div>
-    `,
-      )
-      .join('');
+    winningsContainer.innerHTML = winnings.length
+      ? winnings.map(win => `
+        <div class="card">
+          <h5>${win.title}</h5>
+          <p>Winning Bid: ${win.amount}</p>
+        </div>
+      `).join('')
+      : '<p>No winnings found.</p>';
   } catch (error) {
-    console.error('Error loading winnings:', error);
-  }
-
-  // Display other users' listings
-  try {
-    const otherListings = await readOthersListings();
-    const othersContainer = document.getElementById('othersListings');
-    othersContainer.innerHTML = otherListings
-      .map(
-        (listing) => `
-      <div class="card">
-        <h5>${listing.title}</h5>
-        <p>${listing.description}</p>
-        <p>Bids: ${listing._count.bids || 0}</p>
-        <a href="/auction-website/listing/index.html?id=${listing.id}" class="btn btn-primary">View Listing</a>
-      </div>
-    `,
-      )
-      .join('');
-  } catch (error) {
-    console.error('Error loading other listings:', error);
+    console.error('Error loading winnings:', error.message);
   }
 
   // Handle avatar update
@@ -141,29 +126,30 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const updatedUser = await updateAvatar(reader.result);
-        if (updatedUser && updatedUser.avatar) {
-          document.getElementById('profileImage').src = updatedUser.avatar;
-          alert('Avatar updated successfully!');
-        } else {
-          throw new Error('Invalid response from server');
-        }
-      } catch (error) {
-        alert('Failed to update avatar. Please try again.');
-        console.error('Error updating avatar:', error.message);
+    try {
+      const updatedUser = await updateAvatar(file);
+      if (updatedUser?.avatar?.url) {
+        document.getElementById('profileImage').src = updatedUser.avatar.url;
+        alert('Avatar updated successfully!');
+      } else {
+        throw new Error('Invalid response from server');
       }
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      alert('Failed to update avatar. Please try again.');
+      console.error('Error updating avatar:', error.message);
+    }
   });
 
   // Handle total credit fetch
   try {
     const totalCredits = await getTotalCredit();
-    document.getElementById('credits').textContent = `Credits: ${totalCredits}`;
+    if (typeof totalCredits === 'number') {
+      document.getElementById('credits').textContent = `Credits: ${totalCredits}`;
+    } else {
+      throw new Error('Invalid credit data');
+    }
   } catch (error) {
-    console.error('Error fetching total credit:', error);
+    console.error('Error fetching total credit:', error.message);
+    document.getElementById('credits').textContent = 'Credits: Unavailable';
   }
 });
