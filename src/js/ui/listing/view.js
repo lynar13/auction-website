@@ -8,7 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPaginationControls();
 });
 
-// Load listings based on the current page and limit
+/**
+ * Load and display listings based on the current page and limit.
+ * Fetches data from the server and dynamically updates the DOM.
+ *
+ * @param {number} page - The current page to load.
+ * @param {number} limit - The number of listings to load per page.
+ */
 async function loadListings(page, limit) {
   try {
     const listings = await readListings(page, limit);
@@ -51,7 +57,10 @@ async function loadListings(page, limit) {
   }
 }
 
-// Set up pagination control listeners
+/**
+ * Set up event listeners for pagination and limit controls.
+ * Handles user interaction to navigate between pages or change the number of items per page.
+ */
 function setupPaginationControls() {
   const paginationButtons = document.querySelectorAll('[data-page]');
   const limitButtons = document.querySelectorAll('[data-limit]');
@@ -77,12 +86,24 @@ function setupPaginationControls() {
   }
 }
 
+/**
+ * Navigate to a specific page.
+ * Updates the current page, loads new listings, and updates the URL parameters.
+ *
+ * @param {number} page - The page number to navigate to.
+ */
 function goToPage(page) {
   currentPage = page;
   loadListings(currentPage, listingsPerPage);
   updateUrlParams();
 }
 
+/**
+ * Set the number of listings to display per page.
+ * Updates the limit, resets to the first page, loads new listings, and updates the URL parameters.
+ *
+ * @param {number} limit - The number of listings to display per page.
+ */
 function setListingsPerPage(limit) {
   listingsPerPage = limit;
   currentPage = 1;
@@ -90,6 +111,10 @@ function setListingsPerPage(limit) {
   updateUrlParams();
 }
 
+/**
+ * Update the browser URL to reflect the current page and limit.
+ * Modifies the URL parameters without reloading the page.
+ */
 function updateUrlParams() {
   const url = new URL(window.location);
   url.searchParams.set('page', currentPage);

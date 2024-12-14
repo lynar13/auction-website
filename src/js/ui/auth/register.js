@@ -3,6 +3,13 @@ import { NoroffAPI } from '../../api/index.js';
 
 const api = new NoroffAPI();
 
+/**
+ * Handles the registration process when the registration form is submitted.
+ * 
+ * @param {Event} event - The form submission event.
+ * @returns {Promise<void>} - Registers a new user and redirects to the login page on success.
+ * @throws {Error} - Throws an error if validation fails or registration fails due to server issues.
+ */
 export async function onRegister(event) {
   event.preventDefault();
 
@@ -47,6 +54,12 @@ export async function onRegister(event) {
   }
 }
 
+/**
+ * Initializes the registration page by adding an event listener to the registration form.
+ * 
+ * @returns {void} - Sets up the event listener for registration form submission.
+ * @throws {Error} - Logs an error if the registration form is not found in the DOM.
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registerForm');
   if (form) {

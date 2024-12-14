@@ -3,7 +3,6 @@ import { headers } from '../api/headers.js'; // Adjusted to a relative path
 import { 
   API_AUCTION_PROFILES, 
   API_AUCTION_LISTINGS_ID, 
-  API_AUCTION_LISTINGS_BIDS 
 } from '../api/constants.js';
 
 /**
@@ -80,22 +79,24 @@ export async function getTotalCredit() {
  */
 export async function readUserListings(name) {
   try {
-    const response = await fetch(`${API_AUCTION_PROFILES}/${name}/listings`, {
-      method: "GET",
+    const response = await fetch(`https://v2.api.noroff.dev/auction/profiles/${name}/listings`, {
+      method: 'GET',
       headers: headers(true),
     });
 
+    const result = await response.json();
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch user listings");
+      console.error('Error fetching user listings:', result.errors || result.message);
+      throw new Error(result.message || 'Failed to fetch user listings');
     }
 
-    return await response.json();
+    return result; // Adjust based on actual API response structure
   } catch (error) {
-    console.error("Error fetching user listings:", error.message);
+    console.error('Error fetching user listings:', error.message);
     throw error;
   }
 }
+
 
 /**
  * Update the profile data of a user
@@ -124,9 +125,9 @@ export async function updateProfile(name, data) {
 }
 
 /**
- * Update the user's avatar
- * @param {File} imageFile - The avatar file
- * @returns {Promise<object>} - Updated profile data
+ * Update the user's avatar.
+ * @param {File} imageFile - The image file to set as the avatar.
+ * @returns {Promise<object>} - Updated profile data.
  */
 export async function updateAvatar(imageFile) {
   const user = getCurrentUser();
@@ -135,13 +136,17 @@ export async function updateAvatar(imageFile) {
   const url = `${API_AUCTION_PROFILES}/${user.name}`;
 
   try {
-    const formData = new FormData();
-    formData.append("avatar", imageFile);
+    const payload = {
+      avatar: {
+        url: "https://example.com/path-to-uploaded-image", // Replace with uploaded image URL
+        alt: `${user.name}'s avatar`,
+      },
+    };
 
     const response = await fetch(url, {
       method: "PUT",
-      headers: headers(false, true), // Use headers without Content-Type
-      body: formData,
+      headers: headers(true), // Ensure token and Content-Type are included
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -155,6 +160,39 @@ export async function updateAvatar(imageFile) {
     throw error;
   }
 }
+
+
+/**
+ * Upload image to an external service and return its URL.
+ * @param {File} imageFile - The image file to upload.
+ * @returns {Promise<string>} - The URL of the uploaded image.
+ */
+async function uploadImageToHosting(imageFile) {
+  const UPLOAD_SERVICE_URL = "https://api.imgbb.com/1/upload"; // Example: imgbb API
+  const API_KEY = "your-imgbb-api-key"; // Replace with your actual API key for the hosting service
+
+  const formData = new FormData();
+  formData.append("image", imageFile);
+
+  try {
+    const response = await fetch(`${UPLOAD_SERVICE_URL}?key=${API_KEY}`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image to hosting service");
+    }
+
+    const data = await response.json();
+    return data.data.url; // The hosted URL for the image
+  } catch (error) {
+    console.error("Error uploading image:", error.message);
+    throw error;
+  }
+}
+
+
 
 /**
  * Add a bid to a listing

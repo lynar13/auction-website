@@ -8,25 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // Validate and initialize user
-  let user = localStorage.getItem('user');
-  if (!user) {
-    console.error('User not found in localStorage. Redirecting to login.');
-    alert('You must log in first.');
-    window.location.href = '/auction-website/auth/login/index.html';
-    return;
-  }
-
-  try {
-    user = JSON.parse(user);
-  } catch (error) {
-    console.error('Invalid user data in localStorage:', error);
-    alert('Invalid user data. Please log in again.');
-    localStorage.removeItem('user');
-    window.location.href = '/auction-website/auth/login/index.html';
-    return;
-  }
-
+  /**
+   * Displays an alert message above the form.
+   *
+   * @param {string} message - The message to display in the alert.
+   * @param {string} [type='danger'] - The type of alert ('success', 'warning', 'danger', etc.).
+   */
   function showAlert(message, type = 'danger') {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} mt-3`;
@@ -39,6 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
   }
 
+  /**
+   * Validates the form input before submitting the data.
+   *
+   * @param {object} data - The form data object.
+   * @returns {boolean} - Returns true if the form data is valid, otherwise false.
+   */
   function validateForm(data) {
     if (!data.title.trim()) {
       showAlert('Title is required.', 'warning');
@@ -59,41 +52,36 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
+  /**
+   * Handles the form submission to create a new listing.
+   *
+   * @param {Event} event - The form submission event.
+   * @returns {Promise<void>}
+   */
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-  
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert("You must log in to create a listing.");
-      window.location.href = '/auction-website/auth/login/index.html';
-      return;
-    }
   
     const formData = new FormData(form);
     const postData = Object.fromEntries(formData.entries());
   
-    postData.tags = postData.tags ? postData.tags.split(",").map(tag => tag.trim()) : [];
-    postData.media = postData.media
-      ? postData.media.split(",").map(url => ({ url: url.trim(), alt: "" }))
-      : [];
-  
+    // Transform fields to match API requirements
+    postData.tags = postData.tags ? postData.tags.split(',').map(tag => tag.trim()) : [];
+    postData.media = postData.media ? postData.media.split(',').map(url => ({ url: url.trim() })) : [];
     if (postData.endsAt) {
       postData.endsAt = new Date(postData.endsAt).toISOString();
     }
   
-    if (!validateForm(postData)) return;
+    console.log('Payload being sent:', postData); // Log payload to verify
   
     try {
-      const listing = await createListing(postData);
+      const listing = await createListing(postData); // Call createListing with the object
       showAlert('Listing created successfully!', 'success');
       setTimeout(() => {
-        window.location.href = `/auction-website/listing/index.html?id=${listing.id}`;
+        window.location.href = `/auction-website/profile/index.html?id=${listing.id}`;
       }, 2000);
     } catch (error) {
       console.error("Error creating listing:", error.message);
       showAlert(`Failed to create listing: ${error.message}`, 'danger');
     }
   });
-  
-  
 });

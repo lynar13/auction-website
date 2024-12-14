@@ -1,5 +1,5 @@
 //src/js/api/index.js
-/** 
+/**
  * API class for handling API requests
  *
  * This class includes methods for authentication, auction listings, and profiles.
@@ -66,32 +66,30 @@ export class NoroffAPI {
 
     register: async function ({ name, email, password }) {
       const body = JSON.stringify({ name, email, password });
-    
+
       const response = await fetch(API_AUTH_REGISTER, {
         method: 'POST',
         headers: headers(false), // Exclude Authorization for registration
         body,
       });
-    
+
       const responseData = await response.json();
-      console.log('API Response:', responseData); // Log API response for debugging
-    
+
       if (response.ok) {
         const user = responseData.data; // Extract user data from the API response
-    
+
         if (!user) {
           throw new Error('No user data returned from the API');
         }
-    
+
         // Store user data in localStorage
         localStorage.setItem('user', JSON.stringify(user));
-    
+
         return { user }; // Return user data (no token expected)
       }
-    
+
       throw new Error(responseData.message || "Couldn't register");
     }.bind(this),
-    
   };
 
   search = {

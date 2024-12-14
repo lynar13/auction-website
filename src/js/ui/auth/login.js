@@ -3,6 +3,13 @@ import { NoroffAPI } from '../../api/index.js';
 
 const api = new NoroffAPI();
 
+/**
+ * Handles the login process when the login form is submitted.
+ * 
+ * @param {Event} event - The form submission event.
+ * @returns {Promise<void>} - Logs the user in and redirects to the homepage on success.
+ * @throws {Error} - Throws an error if the login request fails or user/token is missing.
+ */
 export async function onLogin(event) {
   event.preventDefault(); // Prevent the default form submission
 
@@ -21,7 +28,7 @@ export async function onLogin(event) {
       console.log('Token stored in localStorage:', localStorage.getItem('token'));
 
       // Redirect to the home page
-      window.location.href = '/auction-website/profile/index.html';
+      window.location.href = '/auction-website/index.html';
     } else {
       throw new Error('User or access token is undefined');
     }
@@ -31,6 +38,12 @@ export async function onLogin(event) {
   }
 }
 
+/**
+ * Initializes the login page by adding an event listener to the login form.
+ * 
+ * @returns {void} - Sets up the event listener for login form submission.
+ * @throws {Error} - Logs an error if the login form is not found in the DOM.
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   if (loginForm) {

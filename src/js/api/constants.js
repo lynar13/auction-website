@@ -28,5 +28,9 @@ export const API_AUCTION_LISTINGS_TAG = (tag) => `${API_AUCTION_LISTINGS}?tag=${
 export const API_AUCTION_PROFILES_LISTINGS = (name) => `${API_AUCTION_PROFILES_NAME(name)}/listings`;
 export const API_AUCTION_LISTINGS_SEARCH = `${API_AUCTION_LISTINGS}/search`;
 export const API_AUCTION_PROFILES_BIDS = (name) => `${API_AUCTION_PROFILES_NAME(name)}/bids`;
-export const API_AUCTION_PROFILES_WINNING_LISTINGS = (name) => `${API_AUCTION_PROFILES_NAME(name)}/wins`;
-export const API_AUCTION_LISTINGS_BIDS = (listingId) => `${API_AUCTION_LISTINGS_ID(listingId)}/bids`;
+export const API_AUCTION_LISTINGS_BIDS = (listingId) =>
+    `https://v2.api.noroff.dev/auction/listings/${listingId}/bids`;
+  
+  export const API_PROFILE_BIDS = (name) =>
+    `https://v2.api.noroff.dev/auction/profiles/${name}/bids`;
+  
