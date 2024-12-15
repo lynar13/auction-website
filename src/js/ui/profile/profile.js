@@ -1,7 +1,3 @@
-// src/js/ui/profile/profile.js
-
-// src/js/ui/profile/profile.js
-
 import {
   readProfile,
   readUserListings,
@@ -11,10 +7,12 @@ import {
 /**
  * Upload image to Imgur and return the public URL
  * @param {File} imageFile - The image file to upload
+ * @param {number} retries - Number of retries for upload
+ * @param {number} delay - Delay in milliseconds between retries
  * @returns {Promise<string>} - The URL of the uploaded image
  */
 async function uploadImageToImgur(imageFile, retries = 3, delay = 2000) {
-  const CLIENT_ID = "66768252f49364f"; 
+  const CLIENT_ID = "66768252f49364f";
   const IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
 
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -53,7 +51,6 @@ async function uploadImageToImgur(imageFile, retries = 3, delay = 2000) {
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -66,22 +63,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Fetch and display profile data
-    const profileData = await readProfile(user.name);
-    console.log("Fetched profile data:", profileData);
+    const profileResponse = await readProfile(user.name);
+    const profileData = profileResponse.data; // Access the 'data' property correctly
 
-    if (profileData && profileData.data) {
-      const { name, credits, avatar } = profileData.data;
+    if (profileData) {
+      const { name, email, avatar, credits, _count } = profileData;
 
       // Update localStorage with profile data
-      localStorage.setItem("user", JSON.stringify(profileData.data));
+      localStorage.setItem("user", JSON.stringify(profileData));
 
-      // Update DOM
+      // Update DOM with proper data
       document.getElementById("username").textContent = name || "Unknown User";
       document.getElementById("avatar").src =
         avatar?.url || "/auction-website/public/images/avatar.jpeg";
       document.getElementById("credits").textContent = `Credits: ${credits || 0}`;
+
     } else {
-      throw new Error("Incomplete profile data.");
+      throw new Error("Profile data structure is incorrect.");
     }
   } catch (error) {
     console.error("Error reading profile:", error.message);
@@ -92,7 +90,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const listingsResponse = await readUserListings(user.name);
     const listings = listingsResponse.data || [];
-    console.log("Fetched user listings:", listings);
 
     const listingsContainer = document.getElementById("userListings");
     listingsContainer.innerHTML = listings.length
@@ -132,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       try {
         // Notify the user of upload progress
-        document.getElementById('avatar').alt = "Uploading...";
+        document.getElementById("avatar").alt = "Uploading...";
         // Upload image to Imgur
         const imgurUrl = await uploadImageToImgur(file);
 

@@ -41,7 +41,7 @@ async function loadListings(page, limit) {
         <div class="card h-100 shadow-sm">
           ${mediaGallery}
           <div class="card-body">
-            <h5 class="card-title">${listing.title || 'Untitled'}</h5>
+            <h4 class="card-title">${listing.title || 'Untitled'}</h4>
             <p class="card-text">${listing.description ? listing.description.slice(0, 100) + '...' : 'No description available'}</p>
             ${endsAt}
             ${listingLink}

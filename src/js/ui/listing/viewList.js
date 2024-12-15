@@ -105,7 +105,7 @@ function updateCreditsDisplay() {
   const user = JSON.parse(localStorage.getItem('user'));
   const creditsDisplay = document.getElementById('credits');
   if (user && user.credits !== undefined && creditsDisplay) {
-    creditsDisplay.textContent = `Credits: ${user.credits}`;
+    creditsDisplay.textContent = `Your Credits: ${user.credits}`;
   }
 }
 

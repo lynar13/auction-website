@@ -23,6 +23,7 @@ export const API_AUCTION_PROFILES = `${API_AUCTION}/profiles`;
 
 // Dynamic URL generation functions for specific resources
 export const API_AUCTION_LISTINGS_ID = (id) => `${API_AUCTION_LISTINGS}/${id}`;
+
 export const API_AUCTION_PROFILES_NAME = (name) => `${API_AUCTION_PROFILES}/${name}`;
 export const API_AUCTION_LISTINGS_TAG = (tag) => `${API_AUCTION_LISTINGS}?tag=${tag}`;
 export const API_AUCTION_PROFILES_LISTINGS = (name) => `${API_AUCTION_PROFILES_NAME(name)}/listings`;

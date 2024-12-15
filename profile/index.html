@@ -35,22 +35,21 @@
         </div>
       </nav>
     </header>
-    <main class="container my-5">
+    <main class="container my-5 bg-dark">
       <!-- Profile Section -->
       <section class="card p-4 shadow-sm">
         <div class="text-center mb-4">
           <h1 class="text-center mb-4" id="username"></h1>
-          <img
-            src=""
-            alt="User Avatar"
-            id="avatar"
-            class="rounded-circle"
-            width="150"
-          />
-          <button id="updateAvatarButton" class="btn btn-secondary mt-2">
-            Change Avatar
-          </button>
-          <input type="file" id="avatarInput" class="d-none" accept="image/*" />
+          <div class="avatar-container">
+            <img
+              src=""
+              alt="User Avatar"
+              id="avatar"
+              class="rounded-circle"
+            />
+            <button id="updateAvatarButton" class="btn">Change Avatar</button>
+            <input type="file" id="avatarInput" class="d-none" accept="image/*" />
+          </div>
         </div>
         <p class="text-center text-muted" id="credits"></p>
       </section>
@@ -58,11 +57,12 @@
       <!-- User Listings Section -->
       <section class="mt-5">
         <h2 class="mb-4">My Listings</h2>
+        <br>
         <div id="userListings" class="row gx-3 gy-4"></div>
         <!-- User listings will be dynamically populated here -->
       </section>
-
-      <a href="/auction-website/listings/index.html" class="btn btn-secondary">View Others' Listings</a>
+      <br>
+      <a href="/auction-website/listings/index.html" class="btn btn-outline-primary">View Others' Listings</a>
 
     </main>
     <!-- Footer Section -->
@@ -74,7 +74,7 @@
         <a href="/auction-website/privacy.html" class="text-black text-decoration-underline">Privacy Policy</a>
       </p>
       <p>
-        <h4>Follow us</h4>
+        <h5>Follow us</h5>
         <img src="/public/images/facebook-svgrepo-com.svg" alt="facebook" id="socmed-logo">
         <a href="https://lynar13.github.io/VA-Portfolio" class="text-black text-decoration-none"></a>
         <img src="/public/images/instagram-color-svgrepo-com.svg" alt="instagram" id="socmed-logo">
