@@ -35,7 +35,7 @@ export function validateUser() {
 }
 
 export default async function router(pathname = window.location.pathname) {
-  switch (pathname) {
+  switch (pathname.replace('/auction-website', '')) {
     case '/auth/login/index.html':
       await import('../ui/auth/login.js');
       break;

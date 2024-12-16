@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Update DOM with proper data
       document.getElementById("username").textContent = name || "Unknown User";
       document.getElementById("avatar").src =
-        avatar?.url || "/auction-website/public/images/avatar.jpeg";
+        avatar?.url || "https://raw.githubusercontent.com/lynar13/images/main/banana.jpg";
       document.getElementById("credits").textContent = `Credits: ${credits || 0}`;
 
     } else {

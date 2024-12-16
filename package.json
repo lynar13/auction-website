@@ -10,10 +10,11 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "test": "@playwright/test", 
+    "test": "@playwright/test",
     "test:watch": "vitest --watch",
     "preview": "vite",
-    "start": "vite"
+    "start": "vite",
+    "clean": "rm -rf node_modules/.vite && rm -rf dist"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
@@ -27,12 +28,12 @@
     "husky": "^9.1.7",
     "jsdom": "^25.0.1",
     "prettier": "^3.4.1",
+    "sass": "^1.83.0",
     "vite": "^5.4.1",
     "vitest": "^2.1.6"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "gh-pages": "^6.2.0",
-    "sass": "^1.81.0"
+    "gh-pages": "^6.2.0"
   }
 }

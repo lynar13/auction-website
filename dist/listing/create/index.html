@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Listing</title>
+    <meta name="description" content="This is for creating a listing page">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" crossorigin src="/auction-website/assets/app-DP7YxoMj.js"></script>
+    <script type="module" crossorigin src="/auction-website/assets/logout-DxNGUvoj.js"></script>
+    <script type="module" crossorigin src="/auction-website/assets/listing-BDgLyb6Q.js"></script>
+    <script type="module" crossorigin src="/auction-website/assets/create-NOFhquI3.js"></script>
+    <link rel="stylesheet" crossorigin href="/auction-website/assets/app-C_wR-awD.css">
+  </head>
+  <body class="bg-light">
+    <!-- Navbar -->
+    <header class="navbar navbar-expand-lg navbar-light bg-dark py-3">
+      <nav class="container">
+        <div>
+          <a href="/auction-website/index.html" class="navbar-brand d-flex align-items-center">
+            <img src="/auction-website/images/logo.png" alt="Auction Logo" id="auction-logo" class="me-2" />
+          </a>
+        </div>
+        <div class="ms-auto d-flex align-items-center">
+          <a class="nav-link" href="/auction-website/index.html">Home</a>
+          <a class="nav-link" href="/auction-website/profile/index.html">My Profile</a>
+          <a class="nav-link" href="/auction-website/auth/login/index.html" id="loginButton">Login</a>
+          <a class="nav-link" href="/auction-website/auth/register/index.html" id="registerButton">Register</a>
+          <button id="logoutButton" class="btn btn-outline-primary ms-2">Logout</button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Section -->
+    <main>
+      <section class="container my-5">
+        <!-- Alerts Section -->
+        <div id="alerts" aria-live="polite"></div>
+        
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+              <div class="card-body p-4">
+                <h1 class="card-title text-center mb-4">Create New Listing</h1>
+                <form name="createPostForm" id="createListingForm">
+                  <!-- Title -->
+                  <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      id="title"
+                      class="form-control"
+                      required
+                      aria-label="Enter title for the listing"
+                    />
+                  </div>
+
+                  <!-- End Date -->
+                  <div class="mb-3">
+                    <label for="endsAt" class="form-label">End Date</label>
+                    <input
+                      type="date"
+                      name="endsAt"
+                      id="endsAt"
+                      class="form-control"
+                      required
+                      aria-label="Select end date for the listing"
+                    />
+                  </div>
+
+                  <!-- Media Gallery -->
+                  <div class="mb-3">
+                    <label for="media" class="form-label">Media URLs</label>
+                    <input
+                      type="text"
+                      name="media"
+                      id="media"
+                      class="form-control"
+                      placeholder="Add comma-separated media URLs"
+                      aria-label="Enter comma-separated media URLs"
+                    />
+                  </div>
+
+                  <!-- Description -->
+                  <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea
+                      name="description"
+                      id="description"
+                      class="form-control"
+                      rows="5"
+                      required
+                      aria-label="Enter a description for the listing"
+                    ></textarea>
+                  </div>
+
+                  <!-- Tags -->
+                  <div class="mb-3">
+                    <label for="tags" class="form-label">Tags</label>
+                    <input
+                      type="text"
+                      name="tags"
+                      id="tags"
+                      class="form-control"
+                      placeholder="Comma-separated tags"
+                      aria-label="Enter tags separated by commas"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary w-100" 
+                    aria-label="Submit to create listing">
+                    Create Listing
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-4 mt-5">
+      <div class="container text-center">
+        <p>&copy; 2024 Auction Website. All rights reserved.</p>
+        <p>
+          <a href="/auction-website/terms.html" class="text-black text-decoration-underline">Terms of Service</a> | 
+          <a href="/auction-website/privacy.html" class="text-black text-decoration-underline">Privacy Policy</a>
+        </p>
+        <p>
+          <h4>Follow us</h4>
+          <img src="data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='utf-8'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%200%201024%201024'%20class='icon'%20version='1.1'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M715.637%20960h171.897C920.348%20960%20960%20932.759%20960%20898.909V125.091C960%2091.243%20920.348%2064%20887.534%2064H113.716C77.004%2064%2064%2096.892%2064%20125.091v773.818C64%20927.109%2077.004%20960%20113.716%20960h439.012V634.182H410.181c-11.257%200-20.363-9.106-20.363-20.363V491.637c0-11.257%209.106-20.365%2020.363-20.365h142.546V328.728c0-99.354%2088.056-183.272%20192.261-183.272h113.193c11.257%200%2020.365%209.106%2020.365%2020.363V288c0%2011.258-9.108%2020.365-20.365%2020.365h-72.465c-34.444%200-70.079%2019.052-70.079%2050.908v112h131.17a20.27%2020.27%200%200%201%2016.507%208.472c3.856%205.291%204.891%2012.133%202.823%2018.337l-40.728%20122.181a20.403%2020.403%200%200%201-19.33%2013.919h-90.442V960z'%20fill='%232577FF'%20/%3e%3cpath%20d='M807.708%20451.723h-92.071v19.549h112.288c-0.161-3.938-1.326-7.809-3.711-11.078a20.263%2020.263%200%200%200-16.506-8.471zM513.629%20940.451H75.445C83.3%20951.952%2095.599%20960%20113.716%20960h439.012V634.183H513.63v306.268zM839.283%20145.456c-0.451-10.855-9.231-19.549-20.198-19.549H705.89c-104.205%200-192.261%2083.919-192.261%20183.272v142.544H371.083c-11.257%200-20.363%209.108-20.363%2020.365v122.181c0%2011.258%209.107%2020.364%2020.363%2020.364h18.899c-0.012-0.286-0.164-0.527-0.164-0.815V491.637c0-11.257%209.106-20.365%2020.363-20.365h142.546V328.728c0-99.353%2088.056-183.272%20192.261-183.272h94.295z'%20fill=''%20/%3e%3cpath%20d='M900.123%2065.251c12.221%2010.76%2020.778%2024.748%2020.778%2040.29V879.36c0%2033.85-39.651%2061.091-72.467%2061.091H715.637V960h171.896C920.348%20960%20960%20932.759%20960%20898.909V125.091c0-29.6-30.322-54.141-59.877-59.84z'%20fill=''%20/%3e%3c/svg%3e" alt="facebook" id="socmed-logo">
+          <a href="https://lynar13.github.io/VA-Portfolio" class="text-black text-decoration-none"></a>
+          <img src="/auction-website/assets/instagram-color-svgrepo-com-B6yTIzx5.svg" alt="instagram" id="socmed-logo">
+          <a href="https://lynar13.github.io/VA-Portfolio" class="text-black text-decoration-none"></a> 
+          <img src="data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'%20standalone='no'?%3e%3c!--%20Uploaded%20to:%20SVG%20Repo,%20www.svgrepo.com,%20Generator:%20SVG%20Repo%20Mixer%20Tools%20--%3e%3csvg%20width='800px'%20height='800px'%20viewBox='0%20-0.5%2048%2048'%20version='1.1'%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3ctitle%3eGithub-color%3c/title%3e%3cdesc%3eCreated%20with%20Sketch.%3c/desc%3e%3cdefs%3e%3c/defs%3e%3cg%20id='Icons'%20stroke='none'%20stroke-width='1'%20fill='none'%20fill-rule='evenodd'%3e%3cg%20id='Color-'%20transform='translate(-700.000000,%20-560.000000)'%20fill='%233E75C3'%3e%3cpath%20d='M723.9985,560%20C710.746,560%20700,570.787092%20700,584.096644%20C700,594.740671%20706.876,603.77183%20716.4145,606.958412%20C717.6145,607.179786%20718.0525,606.435849%20718.0525,605.797328%20C718.0525,605.225068%20718.0315,603.710086%20718.0195,601.699648%20C711.343,603.155898%20709.9345,598.469394%20709.9345,598.469394%20C708.844,595.686405%20707.2705,594.94548%20707.2705,594.94548%20C705.091,593.450075%20707.4355,593.480194%20707.4355,593.480194%20C709.843,593.650366%20711.1105,595.963499%20711.1105,595.963499%20C713.2525,599.645538%20716.728,598.58234%20718.096,597.964902%20C718.3135,596.407754%20718.9345,595.346062%20719.62,594.743683%20C714.2905,594.135281%20708.688,592.069123%20708.688,582.836167%20C708.688,580.205279%20709.6225,578.054788%20711.1585,576.369634%20C710.911,575.759726%20710.0875,573.311058%20711.3925,569.993458%20C711.3925,569.993458%20713.4085,569.345902%20717.9925,572.46321%20C719.908,571.928599%20721.96,571.662047%20724.0015,571.651505%20C726.04,571.662047%20728.0935,571.928599%20730.0105,572.46321%20C734.5915,569.345902%20736.603,569.993458%20736.603,569.993458%20C737.9125,573.311058%20737.089,575.759726%20736.8415,576.369634%20C738.3805,578.054788%20739.309,580.205279%20739.309,582.836167%20C739.309,592.091712%20733.6975,594.129257%20728.3515,594.725612%20C729.2125,595.469549%20729.9805,596.939353%20729.9805,599.18773%20C729.9805,602.408949%20729.9505,605.006706%20729.9505,605.797328%20C729.9505,606.441873%20730.3825,607.191834%20731.6005,606.9554%20C741.13,603.762794%20748,594.737659%20748,584.096644%20C748,570.787092%20737.254,560%20723.9985,560'%20id='Github'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/svg%3e" alt="github" id="socmed-logo">
+          <a href="https://lynar13.github.io/VA-Portfolio/" class="text-black text-decoration-none"></a>
+        </p>
+      </div>
+    </footer>
+  </body>
