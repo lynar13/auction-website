@@ -1,4 +1,4 @@
-import router from "../js/router/index.js"; 
+import router from "@router/index.js"; 
 
 import "../css/style.scss";
 // Wrap the router call in an async function

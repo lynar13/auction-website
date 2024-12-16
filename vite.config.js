@@ -1,15 +1,16 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   appType: "mpa",
-  base: "/auction-website/",
+  base: mode === "production" ? "/auction-website/" : "/", // Add base path only in production
   publicDir: "public",
   resolve: {
     alias: {
       // Alias example for easier imports
       "@api": resolve(__dirname, "src/js/api"),  // Alias for the api folder
       "@ui": resolve(__dirname, "src/js/ui"),    // Alias for the ui folder
+      "@router": resolve(__dirname, "src/js/router"), // Alias for the router folder
     },
   },
   build: {
@@ -32,4 +33,9 @@ export default defineConfig({
       scss: {},
     },
   },
-});
+}));
+
+// // Alias example for easier imports
+// "@api": resolve(__dirname, "src/js/api"),  // Alias for the api folder
+// "@ui": resolve(__dirname, "src/js/ui"),    // Alias for the ui folder
+// "@router": resolve(__dirname, "src/js/router"), // Alias for the router folder

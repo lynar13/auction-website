@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
           await updateListing(listingId, updatedData);
           alert('Listing updated successfully!');
-          window.location.href = `/auction-website/profile/index.html?id=${listingId}`;
+          window.location.href = `/profile/index.html?id=${listingId}`;
         } catch (error) {
           console.error('Failed to update listing:', error.message);
           alert('Failed to update listing.');

@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!token || !user || !user.name) {
     alert("You must log in to access your profile.");
-    window.location.href = "/auction-website/auth/login/index.html";
+    window.location.href = "/auth/login/index.html";
     return;
   }
 
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="card-body">
               <h5 class="card-title">${listing.title}</h5>
               <p class="card-text">${listing.description || "No description available"}</p>
-              <a href="/auction-website/listing/index.html?id=${listing.id}" class="btn btn-primary">View Listing</a>
+              <a href="/listing/index.html?id=${listing.id}" class="btn btn-primary">View Listing</a>
             </div>
           </div>
         `

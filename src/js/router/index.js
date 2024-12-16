@@ -1,7 +1,7 @@
 // src/js/router/index.js
 
-// Import the Noroff API class
-import { NoroffAPI } from '@api/index.js'; // Adjusted to relative path
+// Import the Noroff API class using alias
+import { NoroffAPI } from '@api/index.js'; 
 
 const apiInstance = new NoroffAPI();
 
@@ -23,48 +23,48 @@ export function validateUser() {
       console.error('Error parsing user data:', error.message);
       alert('Invalid user data. Please log in again.');
       localStorage.removeItem('user'); // Clear corrupted data
-      window.location.href = '/auction-website/auth/login/index.html'; // Redirect to login page
+      window.location.href = '/auth/login/index.html'; // Redirect to login page
       return false;
     }
   }
 
   // Redirect if no valid user
   alert('You must be logged in to access this page.');
-  window.location.href = '/auction-website/auth/login/index.html';
+  window.location.href = '/auth/login/index.html';
   return false;
 }
 
 export default async function router(pathname = window.location.pathname) {
   switch (pathname.replace('/auction-website', '')) {
     case '/auth/login/index.html':
-      await import('../ui/auth/login.js');
+      await import('@ui/auth/login.js');
       break;
     case '/auth/register/index.html':
-      await import('../ui/auth/register.js');
+      await import('@ui/auth/register.js');
       break;
     case '/listing/create/index.html':
       if (validateUser()) {
-        await import('../ui/listing/create.js');
+        await import('@ui/listing/create.js');
       }
       break;
     case '/listing/edit/index.html':
       if (validateUser()) {
-        await import('../ui/listing/edit.js');
+        await import('@ui/listing/edit.js');
       }
       break;
     case '/listing/index.html':
-      await import('../ui/listing/view.js');
+      await import('@ui/listing/view.js');
       break;
     case '/profile/index.html':
       if (validateUser()) {
-        await import('../ui/profile/profile.js');
+        await import('@ui/profile/profile.js');
       }
       break;
     case '/listings/index.html':
-      await import('../ui/listing/viewList.js');
+      await import('@ui/listing/viewList.js');
       break;
     default:
-      await import('../ui/home/home.js');
+      await import('@ui/home/home.js');
   }
 }
 

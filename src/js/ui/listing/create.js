@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const listing = await createListing(postData); // Call createListing with the object
       showAlert('Listing created successfully!', 'success');
       setTimeout(() => {
-        window.location.href = `/auction-website/profile/index.html?id=${listing.id}`;
+        window.location.href = `/profile/index.html?id=${listing.id}`;
       }, 2000);
     } catch (error) {
       console.error("Error creating listing:", error.message);
