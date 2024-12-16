@@ -1,4 +1,4 @@
-import { readListings, createListing } from '/src/js/api/listing.js';
+import { readListings, createListing } from '../../../js/api/listing.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   let currentPage = 1;

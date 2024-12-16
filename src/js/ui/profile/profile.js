@@ -2,7 +2,7 @@ import {
   readProfile,
   readUserListings,
   updateProfile,
-} from "/src/js/api/profile.js";
+} from "../../../js/api/profile.js";
 
 /**
  * Upload image to Imgur and return the public URL
