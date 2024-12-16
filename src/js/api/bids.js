@@ -1,5 +1,5 @@
 import { API_AUCTION_LISTINGS_BIDS, API_PROFILE_BIDS } from "./constants.js";
-import { headers } from "./headers.js"; // Import the headers function
+import { headers } from "@api/headers.js"; // Import the headers function
 
 /**
  * Place a bid on a specific listing.

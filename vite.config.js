@@ -5,6 +5,13 @@ export default defineConfig({
   appType: "mpa",
   base: "/auction-website/",
   publicDir: "public",
+  resolve: {
+    alias: {
+      // Alias example for easier imports
+      "@api": resolve(__dirname, "src/js/api"),  // Alias for the api folder
+      "@ui": resolve(__dirname, "src/js/ui"),    // Alias for the ui folder
+    },
+  },
   build: {
     target: "esnext",
     rollupOptions: {

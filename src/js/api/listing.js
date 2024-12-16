@@ -1,10 +1,10 @@
 // src/js/api/listings.js
-import { headers } from './headers.js';
+import { headers } from '@api/headers.js';
 import {
   API_AUCTION_LISTINGS,
   API_AUCTION_LISTINGS_ID,
   API_AUCTION_LISTINGS_SEARCH,
-} from './constants.js';
+} from '@api/constants.js';
 
 /**
  * Create a new listing.

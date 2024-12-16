@@ -10,8 +10,8 @@ import {
   API_AUTH_LOGIN,
   API_AUTH_REGISTER,
   API_AUCTION_LISTINGS_SEARCH,
-} from './constants.js';
-import { headers } from './headers.js';
+} from '@api/constants.js';
+import { headers } from '@api/headers.js';
 
 export class NoroffAPI {
   constructor() {

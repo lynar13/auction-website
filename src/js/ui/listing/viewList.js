@@ -1,6 +1,6 @@
-import { readListing } from '../../../js/api/listing.js';
-import { placeBid } from '../../../js/api/bids.js';
-import { readProfile } from '../../../js/api/profile.js'; // Ensure correct import
+import { readListing } from '@api/listing.js';
+import { placeBid } from '@api/bids.js';
+import { readProfile } from '@api/profile.js'; // Ensure correct import
 
 document.addEventListener('DOMContentLoaded', async () => {
   const listingId = getListingIdFromUrl();

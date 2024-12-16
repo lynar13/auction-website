@@ -1,4 +1,4 @@
-import { readListing, updateListing } from '../../../js/api/listing.js';
+import { readListing, updateListing } from '@api/listing.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);

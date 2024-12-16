@@ -1,6 +1,6 @@
 // src/js/api/headers.js
 
-import { API_KEY } from './constants.js';
+import { API_KEY } from '@api/constants.js';
 
 /**
  * Generate headers for API requests

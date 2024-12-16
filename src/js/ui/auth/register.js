@@ -1,5 +1,5 @@
 // src/js/ui/auth/register.js
-import { NoroffAPI } from '../../api/index.js';
+import { NoroffAPI } from '@api/index.js';
 
 const api = new NoroffAPI();
 

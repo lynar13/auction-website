@@ -1,7 +1,7 @@
 // src/js/router/index.js
 
 // Import the Noroff API class
-import { NoroffAPI } from '../api/index.js'; // Adjusted to relative path
+import { NoroffAPI } from '@api/index.js'; // Adjusted to relative path
 
 const apiInstance = new NoroffAPI();
 

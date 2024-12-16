@@ -3,7 +3,7 @@ import { headers } from '../api/headers.js'; // Adjusted to a relative path
 import { 
   API_AUCTION_PROFILES, 
   API_AUCTION_LISTINGS_ID, 
-} from '../api/constants.js';
+} from '@api/constants.js';
 
 /**
  * Utility to fetch the current user from localStorage
