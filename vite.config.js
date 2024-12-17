@@ -7,10 +7,12 @@ export default defineConfig(({ mode }) => ({
   publicDir: "public",
   resolve: {
     alias: {
-      // Alias example for easier imports
-      "@api": resolve(__dirname, "src/js/api"),  // Alias for the api folder
-      "@ui": resolve(__dirname, "src/js/ui"),    // Alias for the ui folder
-      "@router": resolve(__dirname, "src/js/router"), // Alias for the router folder
+      "@js": resolve(__dirname, "src/js"),   // Alias for JS files
+      "@css": resolve(__dirname, "src/css"), // Alias for CSS
+      "@images": resolve(__dirname, "public/images"), // Alias for images
+      '@api': resolve(__dirname, 'src/js/api'), // Alias for API folder
+      '@ui': resolve(__dirname, 'src/js/ui'), // Alias for UI folder
+      '@router': resolve(__dirname, 'src/js/router'), // Alias for Router folder 
     },
   },
   build: {

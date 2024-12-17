@@ -28,7 +28,7 @@ export async function onLogin(event) {
       console.log('Token stored in localStorage:', localStorage.getItem('token'));
 
       // Redirect to the home page
-      window.location.href = '/index.html';
+      window.location.href = '../../index.html';
     } else {
       throw new Error('User or access token is undefined');
     }

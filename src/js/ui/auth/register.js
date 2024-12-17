@@ -47,7 +47,7 @@ export async function onRegister(event) {
 
     // Redirect to the login page
     alert('Registration successful! Please log in to continue.');
-    window.location.href = '/auth/login/index.html';
+    window.location.href = '../../auth/login/index.html';
   } catch (error) {
     console.error('Error during registration:', error.message);
     alert(`Registration failed: ${error.message}`);

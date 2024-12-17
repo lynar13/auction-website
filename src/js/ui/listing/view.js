@@ -34,7 +34,7 @@ async function loadListings(page, limit) {
         : `<p class="text-muted"><strong>Ends At:</strong> No expiration date</p>`;
 
       const listingLink = listing.id
-        ? `<a href="/listing/index.html?id=${encodeURIComponent(listing.id)}" class="btn btn-primary mt-auto">Place a Bid</a>`
+        ? `<a href="../listing/index.html?id=${encodeURIComponent(listing.id)}" class="btn btn-primary mt-auto">Place a Bid</a>`
         : '<p class="text-muted small">No valid listing ID available.</p>';
 
       postCard.innerHTML = `
@@ -45,7 +45,7 @@ async function loadListings(page, limit) {
             <p class="card-text">${listing.description ? listing.description.slice(0, 100) + '...' : 'No description available'}</p>
             ${endsAt}
             ${listingLink}
-            <a href="/listing/index.html?id=${listing.id}" class="btn btn-primary">Read More</a>
+            <a href="../listing/index.html?id=${listing.id}" class="btn btn-primary">Read More</a>
           </div>
         </div>
       `;

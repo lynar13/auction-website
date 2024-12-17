@@ -85,7 +85,7 @@ The **Auction House Project** is a web application that allows users to create, 
 3. **Activate to GitHub Pages**
     - Navigate to your repository on GitHub.
     - Go to Settings > Pages.
-    - Select the branch and directory where the build files are located (usually /dist).
+    - Select the branch(gh-pages) and directory where the build files are located (usually /dist).
     - Save your settings, and the app will be deployed to https://your-username.github.io/auction-website.
 
 ## Styling with SASS/SCSS

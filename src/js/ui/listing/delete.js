@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Listing deleted successfully');
         
         // Redirect to listings list after deletion with updated path for GitHub Pages
-        window.location.href = '/profile/index.html';
+        window.location.href = '../profile/index.html';
       } catch (error) {
         console.error('Failed to delete listing:', error);
         alert('Failed to delete listing. Please try again.');
