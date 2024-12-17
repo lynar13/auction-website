@@ -15,7 +15,7 @@ export function onLogout() {
 
     // Redirect the user to the home page after a short delay
     setTimeout(() => {
-      window.location.href = "./index.html"; // Adjusted for GitHub Pages
+      window.location.href = "/index.html"; // Adjusted for GitHub Pages
     }, 500); // Adding a slight delay to ensure storage operations complete before redirect
   } catch (error) {
     // Handle any unexpected errors during logout
