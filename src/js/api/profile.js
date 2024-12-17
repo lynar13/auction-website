@@ -136,16 +136,20 @@ export async function updateAvatar(imageFile) {
   const url = `${API_AUCTION_PROFILES}/${user.name}`;
 
   try {
+    // Upload the image to Cloudinary
+    const uploadedImageUrl = await uploadImageToCloudinary(imageFile);
+
+    // Prepare payload with Cloudinary URL
     const payload = {
       avatar: {
-        url: "https://example.com/path-to-uploaded-image", // Replace with uploaded image URL
+        url: uploadedImageUrl,
         alt: `${user.name}'s avatar`,
       },
     };
 
     const response = await fetch(url, {
       method: "PUT",
-      headers: headers(true), // Ensure token and Content-Type are included
+      headers: headers(true),
       body: JSON.stringify(payload),
     });
 
@@ -154,6 +158,7 @@ export async function updateAvatar(imageFile) {
       throw new Error(errorData.message || "Failed to update avatar");
     }
 
+    console.log("Avatar updated successfully");
     return await response.json();
   } catch (error) {
     console.error("Error updating avatar:", error.message);
@@ -167,15 +172,16 @@ export async function updateAvatar(imageFile) {
  * @param {File} imageFile - The image file to upload.
  * @returns {Promise<string>} - The URL of the uploaded image.
  */
-async function uploadImageToHosting(imageFile) {
-  const UPLOAD_SERVICE_URL = "https://api.imgbb.com/1/upload"; // Example: imgbb API
-  const API_KEY = "your-imgbb-api-key"; // Replace with your actual API key for the hosting service
+async function uploadImageToCloudinary(imageFile) {
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dfe8rtu97/image/upload";
+  const UPLOAD_PRESET = "avatar"; // Replace with your Cloudinary upload preset
 
   const formData = new FormData();
-  formData.append("image", imageFile);
+  formData.append("file", imageFile);
+  formData.append("upload_preset", UPLOAD_PRESET);
 
   try {
-    const response = await fetch(`${UPLOAD_SERVICE_URL}?key=${API_KEY}`, {
+    const response = await fetch(CLOUDINARY_UPLOAD_URL, {
       method: "POST",
       body: formData,
     });
@@ -185,7 +191,7 @@ async function uploadImageToHosting(imageFile) {
     }
 
     const data = await response.json();
-    return data.data.url; // The hosted URL for the image
+    return data.secure_url; // The hosted URL for the image
   } catch (error) {
     console.error("Error uploading image:", error.message);
     throw error;

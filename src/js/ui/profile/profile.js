@@ -1,55 +1,8 @@
 import {
   readProfile,
   readUserListings,
-  updateProfile,
+  updateAvatar,
 } from "@api/profile.js";
-
-/**
- * Upload image to Imgur and return the public URL
- * @param {File} imageFile - The image file to upload
- * @param {number} retries - Number of retries for upload
- * @param {number} delay - Delay in milliseconds between retries
- * @returns {Promise<string>} - The URL of the uploaded image
- */
-async function uploadImageToImgur(imageFile, retries = 3, delay = 2000) {
-  const CLIENT_ID = "66768252f49364f";
-  const IMGUR_UPLOAD_URL = "https://api.imgur.com/3/image";
-
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      const formData = new FormData();
-      formData.append("image", imageFile);
-
-      const response = await fetch(IMGUR_UPLOAD_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Client-ID ${CLIENT_ID}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.data?.error || "Failed to upload image to Imgur"
-        );
-      }
-
-      const data = await response.json();
-      return data.data.link; // Return the URL of the uploaded image
-    } catch (error) {
-      console.error(`Attempt ${attempt}: ${error.message}`);
-      if (attempt < retries) {
-        console.log(`Retrying in ${delay / 1000} seconds...`);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      } else {
-        throw new Error(
-          "All attempts to upload the image to Imgur have failed. Please try again later."
-        );
-      }
-    }
-  }
-}
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
@@ -61,25 +14,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // Fetch and display profile data
   try {
-    // Fetch and display profile data
     const profileResponse = await readProfile(user.name);
-    const profileData = profileResponse.data; // Access the 'data' property correctly
+    const profileData = profileResponse.data;
 
     if (profileData) {
-      const { name, email, avatar, credits, _count } = profileData;
+      const { name, avatar, credits } = profileData;
 
-      // Update localStorage with profile data
       localStorage.setItem("user", JSON.stringify(profileData));
 
-      // Update DOM with proper data
       document.getElementById("username").textContent = name || "Unknown User";
-      document.getElementById("avatar").src =
-        avatar?.url || "https://raw.githubusercontent.com/lynar13/images/main/banana.jpg";
+      document.getElementById("avatar").src = avatar?.url || "";
       document.getElementById("credits").textContent = `Credits: ${credits || 0}`;
-
-    } else {
-      throw new Error("Profile data structure is incorrect.");
     }
   } catch (error) {
     console.error("Error reading profile:", error.message);
@@ -114,12 +61,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       "<p>Error loading listings. Please try again later.</p>";
   }
 
-  // Handle avatar update
+  // Handle avatar upload with Cloudinary
   const avatarInput = document.getElementById("avatarInput");
   const updateAvatarButton = document.getElementById("updateAvatarButton");
 
   if (updateAvatarButton && avatarInput) {
     updateAvatarButton.addEventListener("click", () => avatarInput.click());
+
     avatarInput.addEventListener("change", async () => {
       const file = avatarInput.files[0];
       if (!file) {
@@ -128,28 +76,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       try {
-        // Notify the user of upload progress
         document.getElementById("avatar").alt = "Uploading...";
-        // Upload image to Imgur
-        const imgurUrl = await uploadImageToImgur(file);
 
-        // Update the profile with the new avatar URL
-        const updatedUser = await updateProfile(user.name, {
-          avatar: { url: imgurUrl, alt: "User avatar" },
-        });
+        // Update avatar using Cloudinary
+        const updatedProfile = await updateAvatar(file);
 
-        if (updatedUser?.avatar?.url) {
-          document.getElementById("avatar").src = updatedUser.avatar.url;
-          alert("Avatar updated successfully!");
-        } else {
-          throw new Error("Invalid response from server");
-        }
+        document.getElementById("avatar").src = updatedProfile.avatar.url;
+        alert("Avatar updated successfully!");
       } catch (error) {
+        console.error("Avatar Update Error:", error.message);
         alert(`Failed to update avatar: ${error.message}`);
-        console.error("Error updating avatar:", error.message);
       }
     });
-  } else {
-    console.error("Avatar update elements not found in DOM.");
   }
 });
