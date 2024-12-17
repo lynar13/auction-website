@@ -3,23 +3,25 @@ import { readListing, updateListing } from '@api/listing.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const listingId = urlParams.get('id');
-  console.log('Listing ID:', listingId); // Debugging to confirm correct ID
+
+  console.log('Full URL:', window.location.href);
+  console.log('Query String:', window.location.search);
+  console.log('Listing ID:', listingId);
 
   const form = document.getElementById('editListingForm');
 
   if (!listingId) {
-    alert('No listing ID specified.');
+    alert('No listing ID provided. Redirecting to listings page.');
+    window.location.href = '/listings/index.html';
     return;
   }
 
   try {
-    // Fetch existing listing data
     const listing = await readListing(listingId);
     if (!listing || !listing.data) throw new Error('Listing data not found');
 
     const listingData = listing.data;
 
-    // Populate form fields with existing data
     if (form) {
       form.querySelector('#title').value = listingData.title || '';
       form.querySelector('#description').value = listingData.description || '';
@@ -33,14 +35,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         ? new Date(listingData.endsAt).toISOString().split('T')[0]
         : '';
 
-      // Submit handler for updating the listing
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const formData = new FormData(form);
         const updatedData = Object.fromEntries(formData.entries());
 
-        // Transform form data for tags, media, and date fields
         updatedData.tags = updatedData.tags
           .split(',')
           .map((tag) => tag.trim());
@@ -56,12 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         delete updatedData.endDate; // Remove unused key
 
         try {
-          // Update the listing
           await updateListing(listingId, updatedData);
-
           alert('Listing updated successfully!');
-
-          // Redirect to the listings/index.html page
           window.location.href = '/listings/index.html';
         } catch (error) {
           console.error('Failed to update listing:', error.message);
