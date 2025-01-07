@@ -1,4 +1,5 @@
-// src/js/api/listings.js
+// src/js/api/listing.js
+import { fetchWithLocalStorageCache } from '@utils/cachedFetch';
 import { headers } from '@api/headers.js';
 import {
   API_AUCTION_LISTINGS,
@@ -58,26 +59,19 @@ export async function readListing(id) {
   const url = API_AUCTION_LISTINGS_ID(id);
 
   try {
-    const response = await fetch(url, {
+    // Use fetchWithLocalStorageCache instead of fetch
+    const data = await fetchWithLocalStorageCache(url, {
       method: 'GET',
       headers: headers(true),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error(
-        'API Error:',
-        errorData.message || 'Failed to fetch listing',
-      );
-      throw new Error(errorData.message || 'Failed to fetch listing');
-    }
-
-    return await response.json();
+    return data;
   } catch (error) {
     console.error('Error fetching listing:', error.message);
     throw error;
   }
 }
+
 
 /**
  * Update a specific listing by ID.
@@ -147,37 +141,30 @@ export async function deleteListing(id) {
  * @returns {Promise<object[]>} - A list of listings.
  * @throws {Error} - Throws an error if the request fails.
  */
-export async function readListings(
-  page = 1,
-  perPage = 12,
-  query = '',
-  sort = '',
-) {
+export async function readListings(page = 1, perPage = 12, query = '', sort = '') {
   const params = new URLSearchParams({
     _page: page,
     _limit: perPage,
   });
 
-  if (query) params.append('q', query); // Add search query if provided
-  if (sort) params.append('_sort', sort); // Add sorting parameter if provided
+  if (query) params.append('q', query);
+  if (sort) params.append('_sort', sort);
 
   const url = query
-    ? `${API_AUCTION_LISTINGS_SEARCH}?${params.toString()}` // Use search endpoint if query exists
+    ? `${API_AUCTION_LISTINGS_SEARCH}?${params.toString()}`
     : `${API_AUCTION_LISTINGS}?${params.toString()}`;
 
   try {
-    const response = await fetch(url, {
+    // Use fetchWithLocalStorageCache for caching
+    const data = await fetchWithLocalStorageCache(url, {
       method: 'GET',
       headers: headers(true),
     });
 
-    const result = await response.json();
-    if (!response.ok)
-      throw new Error(result.message || 'Failed to fetch listings');
-
-    return result.data || result;
+    return data.data || data;
   } catch (error) {
     console.error('Error fetching listings:', error.message);
-    throw new Error('Failed to fetch listings: ' + error.message);
+    throw error;
   }
 }
+

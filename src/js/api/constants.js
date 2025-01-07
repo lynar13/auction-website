@@ -5,8 +5,6 @@
  * This file contains all the API endpoints and constants used in the application.
  */
 
-export const API_KEY = "78300a41-8e7a-40b2-804e-14463ccd9ab1";
-
 // Base API URL for the application
 export const API_BASE = "https://v2.api.noroff.dev";
 

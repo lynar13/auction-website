@@ -1,31 +1,32 @@
 // src/js/api/headers.js
 
-import { API_KEY } from '@api/constants.js';
+require('dotenv').config();
+
+const API_KEY = process.env.API_KEY;
 
 /**
- * Generate headers for API requests
- * 
- * @param {boolean} includeContentType - Include "Content-Type: application/json" (default: false)
- * @param {boolean} includeAuth - Include "Authorization: Bearer <token>" (default: true)
- * @returns {Headers} Configured headers for the request
+ * Generate headers for API requests.
+ *
+ * @param {boolean} includeToken - Include "Authorization: Bearer <token>" (default: true).
+ * @param {boolean} isMultipart - Use headers for multipart requests (default: false).
+ * @returns {Object} Configured headers for the request.
  */
-
 export function headers(includeToken = true, isMultipart = false) {
+  // Default headers
   const baseHeaders = isMultipart
     ? {}
     : { 'Content-Type': 'application/json' };
 
+  // Add Authorization token if available and required
   const token = localStorage.getItem('token');
   if (includeToken && token) {
     baseHeaders.Authorization = `Bearer ${token}`;
   }
 
+  // Add API key if available
   if (API_KEY) {
     baseHeaders['X-Noroff-API-Key'] = API_KEY;
   }
 
-  if (includeToken && token) {
-    baseHeaders['Authorization'] = `Bearer ${token}`;
-  }
   return baseHeaders;
 }
