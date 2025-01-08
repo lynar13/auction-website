@@ -1,8 +1,6 @@
 // src/js/api/headers.js
 
-require('dotenv').config();
-
-const API_KEY = process.env.API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 /**
  * Generate headers for API requests.
