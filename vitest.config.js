@@ -1,13 +1,11 @@
 import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  plugins: [react()],
   test: {
-    globals: true, // Enable global `describe`, `it`, etc.
-    environment: 'jsdom', // Simulate a browser-like environment
-    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'], // Test file patterns
-    exclude: ['node_modules', 'dist', '.git', 'cypress'], // Excluded directories
-    coverage: {
-      reporter: ['text', 'html'], // Enable coverage reports
-    },
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.js',
   },
 });
