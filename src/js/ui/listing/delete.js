@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
          * On failure, display an error message to the user.
          */
         const result = await deleteListing(listingId);
-        console.log('Delete result:', result);
-        
+    
         alert('Listing deleted successfully');
         
         // Redirect to listings list after deletion with updated path for GitHub Pages

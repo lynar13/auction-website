@@ -3,11 +3,6 @@ import { readListing, updateListing } from '@api/listing.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const listingId = urlParams.get('id');
-
-  console.log('Full URL:', window.location.href);
-  console.log('Query String:', window.location.search);
-  console.log('Listing ID:', listingId);
-
   const form = document.getElementById('editListingForm');
 
   if (!listingId) {
