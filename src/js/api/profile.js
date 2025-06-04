@@ -1,8 +1,9 @@
 // src/js/api/profile.js
+import { fetchWithLocalStorageCache } from '../utilities/cachedFetch';
 import { headers } from '../api/headers.js'; // Adjusted to a relative path
-import { 
-  API_AUCTION_PROFILES, 
-  API_AUCTION_LISTINGS_ID, 
+import {
+  API_AUCTION_PROFILES,
+  API_AUCTION_LISTINGS_ID,
 } from '@api/constants.js';
 
 /**
@@ -14,7 +15,7 @@ function getCurrentUser() {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   } catch (error) {
-    console.error("Failed to parse user data from localStorage:", error);
+    console.error('Failed to parse user data from localStorage:', error);
     return null;
   }
 }
@@ -25,20 +26,16 @@ function getCurrentUser() {
  * @returns {Promise<object>} - The user's profile data
  */
 export async function readProfile(name) {
+  const url = `${API_AUCTION_PROFILES}/${name}`;
+  const options = {
+    method: 'GET',
+    headers: headers(true),
+  };
+
   try {
-    const response = await fetch(`${API_AUCTION_PROFILES}/${name}`, {
-      method: "GET",
-      headers: headers(true),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch profile");
-    }
-
-    return await response.json();
+    return await fetchWithLocalStorageCache(url, options);
   } catch (error) {
-    console.error("Error reading profile:", error.message);
+    console.error('Error reading profile:', error.message);
     throw error;
   }
 }
@@ -50,24 +47,20 @@ export async function readProfile(name) {
 export async function getTotalCredit() {
   const user = getCurrentUser();
   if (!user || !user.name) {
-    throw new Error("User not found or invalid");
+    throw new Error('User not found or invalid');
   }
 
+  const url = `${API_AUCTION_PROFILES}/${user.name}`;
+  const options = {
+    method: 'GET',
+    headers: headers(true),
+  };
+
   try {
-    const response = await fetch(`${API_AUCTION_PROFILES}/${user.name}`, {
-      method: "GET",
-      headers: headers(true),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch total credit");
-    }
-
-    const profile = await response.json();
+    const profile = await fetchWithLocalStorageCache(url, options);
     return profile.credits || 0;
   } catch (error) {
-    console.error("Error fetching total credit:", error.message);
+    console.error('Error fetching total credit:', error.message);
     throw error;
   }
 }
@@ -78,25 +71,20 @@ export async function getTotalCredit() {
  * @returns {Promise<Array>} - Array of user listings
  */
 export async function readUserListings(name) {
+  const url = `https://v2.api.noroff.dev/auction/profiles/${name}/listings`;
+  const options = {
+    method: 'GET',
+    headers: headers(true),
+  };
+
   try {
-    const response = await fetch(`https://v2.api.noroff.dev/auction/profiles/${name}/listings`, {
-      method: 'GET',
-      headers: headers(true),
-    });
-
-    const result = await response.json();
-    if (!response.ok) {
-      console.error('Error fetching user listings:', result.errors || result.message);
-      throw new Error(result.message || 'Failed to fetch user listings');
-    }
-
-    return result; // Adjust based on actual API response structure
+    const result = await fetchWithLocalStorageCache(url, options);
+    return result;
   } catch (error) {
     console.error('Error fetching user listings:', error.message);
     throw error;
   }
 }
-
 
 /**
  * Update the profile data of a user
@@ -107,19 +95,19 @@ export async function readUserListings(name) {
 export async function updateProfile(name, data) {
   try {
     const response = await fetch(`${API_AUCTION_PROFILES}/${name}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: headers(true),
       body: JSON.stringify(data),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update profile");
+      throw new Error(errorData.message || 'Failed to update profile');
     }
 
     return await response.json();
   } catch (error) {
-    console.error("Error updating profile:", error.message);
+    console.error('Error updating profile:', error.message);
     throw error;
   }
 }
@@ -131,7 +119,7 @@ export async function updateProfile(name, data) {
  */
 export async function updateAvatar(imageFile) {
   const user = getCurrentUser();
-  if (!user || !user.name) throw new Error("User not found");
+  if (!user || !user.name) throw new Error('User not found');
 
   const url = `${API_AUCTION_PROFILES}/${user.name}`;
 
@@ -148,24 +136,22 @@ export async function updateAvatar(imageFile) {
     };
 
     const response = await fetch(url, {
-      method: "PUT",
+      method: 'PUT',
       headers: headers(true),
       body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update avatar");
+      throw new Error(errorData.message || 'Failed to update avatar');
     }
 
-    console.log("Avatar updated successfully");
     return await response.json();
   } catch (error) {
-    console.error("Error updating avatar:", error.message);
+    console.error('Error updating avatar:', error.message);
     throw error;
   }
 }
-
 
 /**
  * Upload image to an external service and return its URL.
@@ -173,32 +159,31 @@ export async function updateAvatar(imageFile) {
  * @returns {Promise<string>} - The URL of the uploaded image.
  */
 async function uploadImageToCloudinary(imageFile) {
-  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dfe8rtu97/image/upload";
-  const UPLOAD_PRESET = "avatar"; // Replace with your Cloudinary upload preset
+  const CLOUDINARY_UPLOAD_URL =
+    'https://api.cloudinary.com/v1_1/dfe8rtu97/image/upload';
+  const UPLOAD_PRESET = 'avatar'; // Replace with your Cloudinary upload preset
 
   const formData = new FormData();
-  formData.append("file", imageFile);
-  formData.append("upload_preset", UPLOAD_PRESET);
+  formData.append('file', imageFile);
+  formData.append('upload_preset', UPLOAD_PRESET);
 
   try {
     const response = await fetch(CLOUDINARY_UPLOAD_URL, {
-      method: "POST",
+      method: 'POST',
       body: formData,
     });
 
     if (!response.ok) {
-      throw new Error("Failed to upload image to hosting service");
+      throw new Error('Failed to upload image to hosting service');
     }
 
     const data = await response.json();
     return data.secure_url; // The hosted URL for the image
   } catch (error) {
-    console.error("Error uploading image:", error.message);
+    console.error('Error uploading image:', error.message);
     throw error;
   }
 }
-
-
 
 /**
  * Add a bid to a listing
@@ -208,23 +193,23 @@ async function uploadImageToCloudinary(imageFile) {
  */
 export async function addBid(listingId, amount) {
   const user = getCurrentUser();
-  if (!user) throw new Error("User not logged in");
+  if (!user) throw new Error('User not logged in');
 
   try {
     const response = await fetch(`${API_AUCTION_LISTINGS_ID(listingId)}/bids`, {
-      method: "POST",
+      method: 'POST',
       headers: headers(true, true),
       body: JSON.stringify({ amount }),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to add bid");
+      throw new Error(errorData.message || 'Failed to add bid');
     }
 
     return await response.json();
   } catch (error) {
-    console.error("Error adding bid:", error.message);
+    console.error('Error adding bid:', error.message);
     throw error;
   }
 }
@@ -235,43 +220,37 @@ export async function addBid(listingId, amount) {
  * @returns {Promise<Array>} - Array of user's bids
  */
 export async function readUserBids(name) {
+  const url = `${API_AUCTION_PROFILES}/${name}/bids`;
+  const options = {
+    method: 'GET',
+    headers: headers(true),
+  };
+
   try {
-    const response = await fetch(`${API_AUCTION_PROFILES}/${name}/bids`, {
-      method: "GET",
-      headers: headers(true),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch user bids");
-    }
-
-    return await response.json();
+    const result = await fetchWithLocalStorageCache(url, options);
+    return result;
   } catch (error) {
-    console.error("Error fetching user bids:", error.message);
+    console.error('Error fetching user bids:', error.message);
     throw error;
   }
 }
 
 /**
  * Fetch the user's winnings
- * 
+ *
  */
 export async function readUserWinnings(name) {
+  const url = `${API_AUCTION_PROFILES}/${name}/wins`;
+  const options = {
+    method: 'GET',
+    headers: headers(true),
+  };
+
   try {
-    const response = await fetch(`${API_AUCTION_PROFILES}/${name}/wins`, {
-      method: "GET",
-      headers: headers(true),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch user winnings");
-    }
-
-    return await response.json();
+    const result = await fetchWithLocalStorageCache(url, options);
+    return result;
   } catch (error) {
-    console.error("Error fetching user winnings:", error.message);
+    console.error('Error fetching user winnings:', error.message);
     throw error;
   }
 }
