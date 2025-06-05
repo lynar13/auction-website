@@ -1,4 +1,4 @@
-// src/js/api/headers.js
+// src/js/api/headers.ts
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 

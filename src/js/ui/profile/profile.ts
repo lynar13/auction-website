@@ -2,7 +2,7 @@ import {
   readProfile,
   readUserListings,
   updateAvatar,
-} from "@api/profile.js";
+} from "@api/profile";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");

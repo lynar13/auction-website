@@ -1,4 +1,4 @@
-import { readListings, createListing } from '@api/listing.js';
+import { readListings, createListing } from '@api/listing';
 
 document.addEventListener('DOMContentLoaded', () => {
   let currentPage = 1;
@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginButton = document.getElementById('loginButton');
   const registerButton = document.getElementById('registerButton');
   const logoutButton = document.getElementById('logoutButton');
+
+  const PLACEHOLDER_IMAGE = "https://placehold.co/400x300?text=No+Image";
+
 
   // Manage login/register/logout visibility
   const user = localStorage.getItem('user');
@@ -56,10 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
       postCard.className = 'col-lg-4 col-md-6 col-sm-12 mb-4';
 
       // Validate media
+      
       const mediaGallery = listing.media?.[0]?.url
-        ? `<img src="${listing.media[0].url}" alt="${listing.title}" class="img-fluid rounded mb-3">`
-        : `<img src="https://via.placeholder.com/400" alt="Default Image" class="img-fluid rounded mb-3">`;
-
+      ? `<img src="${listing.media[0].url}" alt="${listing.title}" class="img-fluid rounded mb-3">`
+      : `<img src="${PLACEHOLDER_IMAGE}" alt="Default Image" class="img-fluid rounded mb-3">`;
+    
       // Validate endsAt
       const endsAt = listing.endsAt
         ? `<p class="text-muted small"><strong>Ends At:</strong> ${new Date(listing.endsAt).toLocaleString()}</p>`

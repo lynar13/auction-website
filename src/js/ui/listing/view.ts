@@ -1,4 +1,4 @@
-import { readListings } from '@api/listing.js';
+import { readListings } from '@api/listing';
 
 let currentPage = 1;
 let listingsPerPage = 12;

@@ -1,4 +1,4 @@
-import { deleteListing } from '@api/listing.js';
+import { deleteListing } from '@api/listing';
 
 document.addEventListener('DOMContentLoaded', () => {
   const deleteButton = document.getElementById('deleteButton');

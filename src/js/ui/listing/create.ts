@@ -1,4 +1,4 @@
-import { createListing } from '@api/listing.js';
+import { createListing } from '@api/listing';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('createListingForm');

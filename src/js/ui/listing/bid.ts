@@ -1,4 +1,4 @@
-import { placeBid, fetchBidsByProfile } from '@/api/bids.js';
+import { placeBid, fetchBidsByProfile } from '@api/bids';
 
 document.addEventListener('DOMContentLoaded', () => {
   const bidForm = document.getElementById('bidForm');

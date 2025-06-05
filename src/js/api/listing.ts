@@ -1,11 +1,11 @@
-// src/js/api/listing.js
+// src/js/api/listing.ts
 import { fetchWithLocalStorageCache } from '@utils/cachedFetch';
-import { headers } from '@api/headers.js';
+import { headers } from '@api/headers';
 import {
   API_AUCTION_LISTINGS,
   API_AUCTION_LISTINGS_ID,
   API_AUCTION_LISTINGS_SEARCH,
-} from '@api/constants.js';
+} from '@api/constants';
 
 /**
  * Create a new listing.

@@ -1,4 +1,4 @@
-//src/js/api/index.js
+//src/js/api/index.ts
 /**
  * API class for handling API requests
  *
@@ -10,8 +10,8 @@ import {
   API_AUTH_LOGIN,
   API_AUTH_REGISTER,
   API_AUCTION_LISTINGS_SEARCH,
-} from '@api/constants.js';
-import { headers } from '@api/headers.js';
+} from '@api/constants';
+import { headers } from '@api/headers';
 
 export class NoroffAPI {
   constructor() {

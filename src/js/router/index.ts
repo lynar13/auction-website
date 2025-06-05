@@ -1,7 +1,7 @@
 // src/js/router/index.js
 
 // Import the Noroff API class using alias
-import { NoroffAPI } from '@api/index.js'; 
+import { NoroffAPI } from '@api/index'; 
 
 const apiInstance = new NoroffAPI();
 
@@ -37,34 +37,34 @@ export function validateUser() {
 export default async function router(pathname = window.location.pathname) {
   switch (pathname.replace('/auction-website', '')) {
     case '/auth/login/index.html':
-      await import('@ui/auth/login.js');
+      await import('@ui/auth/login');
       break;
     case '/auth/register/index.html':
-      await import('@ui/auth/register.js');
+      await import('@ui/auth/register');
       break;
     case '/listing/create/index.html':
       if (validateUser()) {
-        await import('@ui/listing/create.js');
+        await import('@ui/listing/create');
       }
       break;
     case '/listing/edit/index.html':
       if (validateUser()) {
-        await import('@ui/listing/edit.js');
+        await import('@ui/listing/edit');
       }
       break;
     case '/listing/index.html':
-      await import('@ui/listing/view.js');
+      await import('@ui/listing/view');
       break;
     case '/profile/index.html':
       if (validateUser()) {
-        await import('@ui/profile/profile.js');
+        await import('@ui/profile/profile');
       }
       break;
     case '/listings/index.html':
-      await import('@ui/listing/viewList.js');
+      await import('@ui/listing/viewList');
       break;
     default:
-      await import('@ui/home/home.js');
+      await import('@ui/home/home');
   }
 }
 
