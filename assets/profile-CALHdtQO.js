@@ -1,0 +1,10 @@
+import{r as d,a as c,u as m}from"./profile-gh1bRarO.js";import"./cachedFetch-OvMXQHTG.js";import"./app-vh6XL3P4.js";document.addEventListener("DOMContentLoaded",async()=>{const i=localStorage.getItem("token"),r=JSON.parse(localStorage.getItem("user"));if(!i||!r||!r.name){alert("You must log in to access your profile."),window.location.href="/auth/login/index.html";return}try{const e=(await d(r.name)).data;if(e){const{name:s,avatar:a,credits:l}=e;localStorage.setItem("user",JSON.stringify(e)),document.getElementById("username").textContent=s||"Unknown User",document.getElementById("avatar").src=a?.url||"",document.getElementById("credits").textContent=`Credits: ${l||0}`}}catch(t){console.error("Error reading profile:",t.message),document.getElementById("credits").textContent="Credits: Unavailable"}try{const e=(await c(r.name)).data||[],s=document.getElementById("userListings");s.innerHTML=e.length?e.map(a=>`
+          <div class="card">
+            <img src="${a.media?.[0]?.url||"https://via.placeholder.com/400"}" alt="${a.title}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">${a.title}</h5>
+              <p class="card-text">${a.description||"No description available"}</p>
+              <a href="/listing/index.html?id=${a.id}" class="btn btn-primary">View Listing</a>
+            </div>
+          </div>
+        `).join(""):"<p>No listings found.</p>"}catch(t){console.error("Error fetching user listings:",t.message),document.getElementById("userListings").innerHTML="<p>Error loading listings. Please try again later.</p>"}const n=document.getElementById("avatarInput"),o=document.getElementById("updateAvatarButton");o&&n&&(o.addEventListener("click",()=>n.click()),n.addEventListener("change",async()=>{const t=n.files[0];if(!t){alert("Please select an image to upload.");return}try{document.getElementById("avatar").alt="Uploading...";const e=await m(t);document.getElementById("avatar").src=e.avatar.url,alert("Avatar updated successfully!")}catch(e){console.error("Avatar Update Error:",e.message),alert(`Failed to update avatar: ${e.message}`)}}))});
