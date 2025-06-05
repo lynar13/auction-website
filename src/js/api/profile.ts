@@ -1,4 +1,5 @@
-// src/js/api/profile.js
+// src/js/api/profile.ts
+import type { User, Profile, Listing } from '@types/types';
 import { fetchWithLocalStorageCache } from '@utils/cachedFetch';
 import { headers } from '@api/headers'; // Adjusted to a relative path
 import {
@@ -10,10 +11,10 @@ import {
  * Utility to fetch the current user from localStorage
  * @returns {object|null} The parsed user object or null if not found
  */
-function getCurrentUser() {
+function getCurrentUser(): User | null {
   try {
     const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    return user ? JSON.parse(user) as User : null;
   } catch (error) {
     console.error('Failed to parse user data from localStorage:', error);
     return null;
@@ -25,7 +26,7 @@ function getCurrentUser() {
  * @param {string} name - The user's name
  * @returns {Promise<object>} - The user's profile data
  */
-export async function readProfile(name) {
+export async function readProfile(name: string): Promise<Profile> {
   const url = `${API_AUCTION_PROFILES}/${name}`;
   const options = {
     method: 'GET',
@@ -33,9 +34,9 @@ export async function readProfile(name) {
   };
 
   try {
-    return await fetchWithLocalStorageCache(url, options);
+    return await fetchWithLocalStorageCache(url, options) as Profile;
   } catch (error) {
-    console.error('Error reading profile:', error.message);
+    console.error('Error reading profile:', (error as Error).message);
     throw error;
   }
 }
@@ -44,7 +45,7 @@ export async function readProfile(name) {
  * Fetch the total credit of the current user
  * @returns {Promise<number>} - Total credits of the user
  */
-export async function getTotalCredit() {
+export async function getTotalCredit(): Promise<number> {
   const user = getCurrentUser();
   if (!user || !user.name) {
     throw new Error('User not found or invalid');
@@ -57,10 +58,10 @@ export async function getTotalCredit() {
   };
 
   try {
-    const profile = await fetchWithLocalStorageCache(url, options);
+    const profile = await fetchWithLocalStorageCache(url, options) as Profile;
     return profile.credits || 0;
   } catch (error) {
-    console.error('Error fetching total credit:', error.message);
+    console.error('Error fetching total credit:', (error as Error).message);
     throw error;
   }
 }
@@ -70,7 +71,7 @@ export async function getTotalCredit() {
  * @param {string} name - The user's name
  * @returns {Promise<Array>} - Array of user listings
  */
-export async function readUserListings(name) {
+export async function readUserListings(name: string): Promise<Listing[]> {
   const url = `https://v2.api.noroff.dev/auction/profiles/${name}/listings`;
   const options = {
     method: 'GET',
@@ -78,10 +79,9 @@ export async function readUserListings(name) {
   };
 
   try {
-    const result = await fetchWithLocalStorageCache(url, options);
-    return result;
+    return await fetchWithLocalStorageCache(url, options) as Listing[];
   } catch (error) {
-    console.error('Error fetching user listings:', error.message);
+    console.error('Error fetching user listings:', (error as Error).message);
     throw error;
   }
 }
@@ -92,7 +92,7 @@ export async function readUserListings(name) {
  * @param {object} data - Profile data to update
  * @returns {Promise<object>} - Updated profile data
  */
-export async function updateProfile(name, data) {
+export async function updateProfile(name: string, data: Partial<Profile>): Promise<Profile> {
   try {
     const response = await fetch(`${API_AUCTION_PROFILES}/${name}`, {
       method: 'PUT',
@@ -107,7 +107,7 @@ export async function updateProfile(name, data) {
 
     return await response.json();
   } catch (error) {
-    console.error('Error updating profile:', error.message);
+    console.error('Error updating profile:', (error as Error).message);
     throw error;
   }
 }
@@ -117,7 +117,7 @@ export async function updateProfile(name, data) {
  * @param {File} imageFile - The image file to set as the avatar.
  * @returns {Promise<object>} - Updated profile data.
  */
-export async function updateAvatar(imageFile) {
+export async function updateAvatar(imageFile: File): Promise<Profile> {
   const user = getCurrentUser();
   if (!user || !user.name) throw new Error('User not found');
 
@@ -148,7 +148,7 @@ export async function updateAvatar(imageFile) {
 
     return await response.json();
   } catch (error) {
-    console.error('Error updating avatar:', error.message);
+    console.error('Error updating avatar:', (error as Error).message);
     throw error;
   }
 }
@@ -158,7 +158,7 @@ export async function updateAvatar(imageFile) {
  * @param {File} imageFile - The image file to upload.
  * @returns {Promise<string>} - The URL of the uploaded image.
  */
-async function uploadImageToCloudinary(imageFile) {
+async function uploadImageToCloudinary(imageFile: File): Promise<string> {
   const CLOUDINARY_UPLOAD_URL =
     'https://api.cloudinary.com/v1_1/dfe8rtu97/image/upload';
   const UPLOAD_PRESET = 'avatar'; // Replace with your Cloudinary upload preset
@@ -180,7 +180,7 @@ async function uploadImageToCloudinary(imageFile) {
     const data = await response.json();
     return data.secure_url; // The hosted URL for the image
   } catch (error) {
-    console.error('Error uploading image:', error.message);
+    console.error('Error uploading image:', (error as Error).message);
     throw error;
   }
 }
@@ -191,7 +191,7 @@ async function uploadImageToCloudinary(imageFile) {
  * @param {number} amount - The bid amount
  * @returns {Promise<object>} - Updated listing data
  */
-export async function addBid(listingId, amount) {
+export async function addBid(listingId: string, amount: number): Promise<any> {
   const user = getCurrentUser();
   if (!user) throw new Error('User not logged in');
 
@@ -209,7 +209,7 @@ export async function addBid(listingId, amount) {
 
     return await response.json();
   } catch (error) {
-    console.error('Error adding bid:', error.message);
+    console.error('Error adding bid:', (error as Error).message);
     throw error;
   }
 }
@@ -219,7 +219,7 @@ export async function addBid(listingId, amount) {
  * @param {string} name - The user's name
  * @returns {Promise<Array>} - Array of user's bids
  */
-export async function readUserBids(name) {
+export async function readUserBids(name: string): Promise<any[]> {
   const url = `${API_AUCTION_PROFILES}/${name}/bids`;
   const options = {
     method: 'GET',
@@ -227,10 +227,9 @@ export async function readUserBids(name) {
   };
 
   try {
-    const result = await fetchWithLocalStorageCache(url, options);
-    return result;
+    return await fetchWithLocalStorageCache(url, options) as any[];
   } catch (error) {
-    console.error('Error fetching user bids:', error.message);
+    console.error('Error fetching user bids:', (error as Error).message);
     throw error;
   }
 }
@@ -239,7 +238,7 @@ export async function readUserBids(name) {
  * Fetch the user's winnings
  *
  */
-export async function readUserWinnings(name) {
+export async function readUserWinnings(name: string): Promise<any[]> {
   const url = `${API_AUCTION_PROFILES}/${name}/wins`;
   const options = {
     method: 'GET',
@@ -247,10 +246,9 @@ export async function readUserWinnings(name) {
   };
 
   try {
-    const result = await fetchWithLocalStorageCache(url, options);
-    return result;
+    return await fetchWithLocalStorageCache(url, options) as any[];
   } catch (error) {
-    console.error('Error fetching user winnings:', error.message);
+    console.error('Error fetching user winnings:', (error as Error).message);
     throw error;
   }
 }

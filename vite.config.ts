@@ -13,7 +13,8 @@ export default defineConfig(({ mode }) => ({
       '@api': resolve(__dirname, 'src/js/api'), // Alias for API folder
       '@ui': resolve(__dirname, 'src/js/ui'), // Alias for UI folder
       '@router': resolve(__dirname, 'src/js/router'), // Alias for Router folder 
-      '@utils': resolve(__dirname, 'src/js/utilities'), // Alias for Utilities folder 
+      '@utils': resolve(__dirname, 'src/js/utilities'), // Alias for Utilities folder
+      '@types': resolve(__dirname, 'src/js/types'), // Alias for Types folder  
     },
   },
   build: {

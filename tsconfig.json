@@ -15,7 +15,8 @@
       "@api/*": ["src/js/api/*"],
       "@ui/*": ["src/js/ui/*"],
       "@router/*": ["src/js/router/*"],
-      "@utils/*": ["src/js/utilities/*"]
+      "@utils/*": ["src/js/utilities/*"],
+      "@types/*": ["src/js/types/*"]
     }
   },
   "include": ["src", "vite.config.ts"]
