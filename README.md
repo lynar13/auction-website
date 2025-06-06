@@ -69,7 +69,7 @@ The **Auction House Project** is a web application that allows users to create, 
     ```bash
     npm run build
 
-2. **Deploy to GitHub Pages
+2. **Deploy to Netlify
     - Set the base option in vite.config.js to the repository name:
     ```javascript
     export default {
