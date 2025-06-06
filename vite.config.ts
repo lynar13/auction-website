@@ -1,24 +1,28 @@
+// vite.config.js
 import { resolve } from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => ({
   appType: "mpa",
-  base: mode === "production" ? "/auction-website/" : "/", // Add base path only in production
+  base: "/", // ✅ Netlify deploys to root domain
   publicDir: "public",
+
   resolve: {
     alias: {
-      "@js": resolve(__dirname, "src/js"),   // Alias for JS files
-      "@css": resolve(__dirname, "src/css"), // Alias for CSS
-      "@images": resolve(__dirname, "public/images"), // Alias for images
-      '@api': resolve(__dirname, 'src/js/api'), // Alias for API folder
-      '@ui': resolve(__dirname, 'src/js/ui'), // Alias for UI folder
-      '@router': resolve(__dirname, 'src/js/router'), // Alias for Router folder 
-      '@utils': resolve(__dirname, 'src/js/utilities'), // Alias for Utilities folder
-      '@types': resolve(__dirname, 'src/js/types'), // Alias for Types folder  
+      "@js": resolve(__dirname, "src/js"),
+      "@css": resolve(__dirname, "src/css"),
+      "@images": resolve(__dirname, "public/images"),
+      "@api": resolve(__dirname, "src/js/api"),
+      "@ui": resolve(__dirname, "src/js/ui"),
+      "@router": resolve(__dirname, "src/js/router"),
+      "@utils": resolve(__dirname, "src/js/utilities"),
+      "@types": resolve(__dirname, "src/js/types"),
     },
   },
+
   build: {
     target: "esnext",
+    outDir: "dist",
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
@@ -32,10 +36,10 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
+
   css: {
     preprocessorOptions: {
       scss: {},
     },
   },
 }));
-
